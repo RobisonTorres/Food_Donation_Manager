@@ -1,0 +1,34 @@
+package com.unifecaf.Food_Donation_Manager.Dtos;
+
+import java.time.LocalDate;
+
+public class ChildDto {
+
+    private String name;
+    private LocalDate birthDate;
+    private Integer family_id;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public Integer getFamily_id() {
+        return family_id;
+    }
+
+    public void setFamily_id(Integer family_id) {
+        this.family_id = family_id;
+    }
+}

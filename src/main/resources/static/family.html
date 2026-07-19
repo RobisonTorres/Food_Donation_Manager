@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Manager</title>
+    <link href="style.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="family.js" defer></script>
+</head>
+<body class="bg-light">
+ <div class="row mb-4">
+          <div class="col-lg-4 mb-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <small class="text-muted">families</small>
+                <h2 id="totalFamilies">0</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+<div class="container py-4">
+    <h2 class="text-center mb-4 text-secondary">
+        Welcome! You can manage all registered families here.
+    </h2>
+
+    <section class="mb-4 d-flex">
+        <input id="searchFamily" type="text" class="form-control me-2" placeholder="Search family by name..." />
+        <button id="addNewFamily" class="btn btn-primary text-nowrap" onclick="document.getElementById('popForm').style.display='block'">
+            <i class="fas fa-plus me-1"></i> Add Family
+        </button>
+    </section>
+
+    <section>
+        <div id="showAllFamilies" class="row g-3"></div>
+
+        <template id="family-card-template">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow h-100 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-center text-primary mb-4">
+                            <i class="fas fa-users me-2"></i>
+                            <span class="family-name"></span>
+                        </h5>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-location-dot me-2 text-muted"></i>
+                            <strong>Address:</strong> <span class="family-address"></span>
+                        </p>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-map me-2 text-muted"></i>
+                            <strong>Neighborhood:</strong> <span class="family-neighborhood"></span>
+                        </p>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-phone me-2 text-muted"></i>
+                            <strong>Phone:</strong> <span class="family-phone"></span>
+                        </p>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-house-user me-2 text-muted"></i>
+                            <strong>Residents:</strong> <span class="family-residents"></span>
+                        </p>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-male me-2 text-muted"></i>
+                            <strong>Men:</strong> <span class="family-men"></span>
+                        </p>
+
+                        <p class="card-text mb-2">
+                            <i class="fas fa-female me-2 text-muted"></i>
+                            <strong>Women:</strong> <span class="family-women"></span>
+                        </p>
+
+                        <p class="card-text mb-3">
+                            <i class="fas fa-child me-2 text-muted"></i>
+                            <strong>Children:</strong> <span class="family-children"></span>
+                        </p>
+
+                        <p class="card-text mb-3">
+                            <i class="fas fa-child me-2 text-muted"></i>
+                            <strong>Status:</strong> <span class="family-status"></span>
+                        </p>
+
+                        <div class="d-flex justify-content-center gap-2 mt-auto pt-3">
+                            <button class="btn btn-outline-primary flex-grow-1 btn-edit">
+                                <i class="fas fa-pen me-1"></i> Edit
+                            </button>
+                            <button class="btn btn-outline-danger flex-grow-1 btn-delete">
+                                <i class="fas fa-trash me-1"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </section>
+</div>
+
+<form id="popForm"
+      class="form-popup container bg-white p-4 rounded shadow"
+      style="display:none; max-width:700px;">
+
+    <h3 class="mb-4 text-center fw-bold">Register Family</h3>
+
+    <div class="row g-3">
+
+        <!-- Nome -->
+        <div class="col-md-8">
+            <label for="name" class="form-label fw-semibold">Full Name</label>
+            <input type="text"
+                   id="name"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-4">
+            <label for="status" class="form-label fw-semibold">Status</label>
+            <select id="status" class="form-select">
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+
+        <!-- Endereço -->
+        <div class="col-md-8">
+            <label for="address" class="form-label fw-semibold">Address</label>
+            <input type="text"
+                   id="address"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Bairro -->
+        <div class="col-md-4">
+            <label for="neighborhood" class="form-label fw-semibold">Neighborhood</label>
+            <input type="text"
+                   id="neighborhood"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Telefone -->
+        <div class="col-md-6">
+            <label for="phone" class="form-label fw-semibold">Phone</label>
+            <input type="text"
+                   id="phone"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Homens -->
+        <div class="col-md-3">
+            <label for="men" class="form-label fw-semibold">Men</label>
+            <input type="number"
+                   id="men"
+                   class="form-control"
+                   min="0"
+                   required>
+        </div>
+
+        <!-- Mulheres -->
+        <div class="col-md-3">
+            <label for="women" class="form-label fw-semibold">Women</label>
+            <input type="number"
+                   id="women"
+                   class="form-control"
+                   min="0"
+                   required>
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Seção das Crianças -->
+    <div class="mt-2">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0 fw-semibold">
+                Child Information
+            </h5>
+
+            <button type="button"
+                    class="btn btn-primary btn-sm"
+                    onclick="addChild('childrenContainer')">
+                <i class="fas fa-plus me-1"></i>
+                Add Child
+            </button>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th style="width:180px;">Birth Date</th>
+                        <th class="text-center" style="width:70px;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody id="childrenContainer">
+                    <!-- As linhas serão adicionadas pelo JavaScript -->
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end gap-2">
+
+        <button type="button"
+                class="btn btn-secondary"
+                id="closeForm">
+            <i class="fas fa-times me-1"></i>
+            Close
+        </button>
+
+        <button type="submit"
+                class="btn btn-success px-4"
+                onclick="addFamily(event)">
+            <i class="fas fa-save me-1"></i>
+            Create
+        </button>
+
+    </div>
+
+</form>
+
+<form id="popFormUpdate"
+      class="form-popup container bg-white p-4 rounded shadow"
+      style="display:none; max-width:700px;">
+
+    <h3 class="mb-4 text-center fw-bold">Edit Family</h3>
+
+    <input type="hidden" id="familyId">
+
+    <div class="row g-3">
+
+        <!-- Nome -->
+        <div class="col-md-8">
+            <label for="nameUpdate" class="form-label fw-semibold">Full Name</label>
+            <input type="text"
+                   id="nameUpdate"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-4">
+            <label for="statusUpdate" class="form-label fw-semibold">Status</label>
+            <select id="statusUpdate" class="form-select">
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+
+        <!-- Endereço -->
+        <div class="col-md-8">
+            <label for="addressUpdate" class="form-label fw-semibold">Address</label>
+            <input type="text"
+                   id="addressUpdate"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Bairro -->
+        <div class="col-md-4">
+            <label for="neighborhoodUpdate" class="form-label fw-semibold">Neighborhood</label>
+            <input type="text"
+                   id="neighborhoodUpdate"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Telefone -->
+        <div class="col-md-6">
+            <label for="phoneUpdate" class="form-label fw-semibold">Phone</label>
+            <input type="text"
+                   id="phoneUpdate"
+                   class="form-control"
+                   required>
+        </div>
+
+        <!-- Homens -->
+        <div class="col-md-3">
+            <label for="menUpdate" class="form-label fw-semibold">Men</label>
+            <input type="number"
+                   id="menUpdate"
+                   class="form-control"
+                   min="0"
+                   required>
+        </div>
+
+        <!-- Mulheres -->
+        <div class="col-md-3">
+            <label for="womenUpdate" class="form-label fw-semibold">Women</label>
+            <input type="number"
+                   id="womenUpdate"
+                   class="form-control"
+                   min="0"
+                   required>
+        </div>
+
+        <div hidden>
+            <label class="form-label">Children</label>
+            <input id="childrenUpdate" class="form-control" placeholder="Children">
+        </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end gap-2">
+
+        <button type="button"
+                class="btn btn-secondary"
+                id="closeFormUpdate">
+            <i class="fas fa-times me-1"></i>
+            Close
+        </button>
+
+        <button type="submit"
+                class="btn btn-primary px-4"
+                onclick="updateFamily(event)">
+            <i class="fas fa-edit me-1"></i>
+            Update
+        </button>
+
+        <button type="button" id="updateChildren" 
+            class="btn btn-outline-primary flex-grow-1 btn-edit-children">    
+            <i class="fas fa-edit me-1"></i>
+            Update Children
+        </button>
+
+    </div>
+
+</form>
+<form id="popFormUpdateChildren"
+      class="form-popup container bg-white p-4 rounded shadow"
+      style="display:none; max-width:600px;">
+
+    <h3 class="mb-4 text-center fw-bold">Edit Children</h3>
+
+    <input type="hidden" id="familyIdChildrenUpdate">
+
+    <button type="button"
+                    class="btn btn-primary btn-sm"
+                    onclick="addChild('childrenContainerUpdate')">
+                <i class="fas fa-plus me-1"></i>
+                Add Child
+            </button>
+
+    <div class="table-responsive">
+
+            <table class="table table-bordered align-middle mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th style="width:180px;">Birth Date</th>
+                        <th class="text-center" style="width:70px;">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody id="childrenContainerUpdate">
+                    <!-- As linhas serão adicionadas pelo JavaScript -->
+                </tbody>
+
+            </table>
+
+        </div>
+        
+
+    <hr class="my-4">
+
+    <!-- Botões -->
+    <div class="d-flex justify-content-end gap-2">
+
+        <button type="button"
+                class="btn btn-secondary"
+                id="closeFormUpdateChildren">
+            <i class="fas fa-times me-1"></i>
+            Closed
+        </button>
+
+        <button type="button"
+                class="btn btn-primary px-4"
+                onclick="updateChildrenAll(event)">
+            <i class="fas fa-edit me-1"></i>
+            Update
+        </button>
+    </div>
+
+</form>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
