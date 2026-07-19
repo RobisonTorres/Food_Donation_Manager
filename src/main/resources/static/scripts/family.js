@@ -1,61 +1,52 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    
-    const btnAddNewFamily = document.getElementById('addNewFamily');
-    if (btnAddNewFamily) btnAddNewFamily.addEventListener('click', displayForm);
+document.getElementById('addNewFamily').addEventListener('click', displayForm);
+document.getElementById('closeForm').addEventListener('click', closeForm);
+document.getElementById('closeFormUpdate').addEventListener('click', closeFormUpdate);
+document.getElementById('closeFormUpdateChildren').addEventListener('click', closeFormUpdateChildren);
 
-    const btnCloseForm = document.getElementById('closeForm');
-    if (btnCloseForm) btnCloseForm.addEventListener('click', closeForm);
+const search = document.querySelector('#searchFamily');
+if (search) {
 
-    const btnCloseFormUpdate = document.getElementById('closeFormUpdate');
-    if (btnCloseFormUpdate) btnCloseFormUpdate.addEventListener('click', closeFormUpdate);
-
-    const btnCloseFormUpdateChildren = document.getElementById('closeFormUpdateChildren');
-    if (btnCloseFormUpdateChildren) btnCloseFormUpdateChildren.addEventListener('click', closeFormUpdateChildren);
-
-    const search = document.querySelector('#searchFamily');
-    if (search) {
-        search.addEventListener('input', () => {
-            const value = search.value.toLowerCase();
-            const allFamilies = document.querySelector('#showAllFamilies');
+    // This function...
+    search.addEventListener('input', () => {
+        const value = search.value.toLowerCase();
+        const allFamilies = document.querySelector('#showAllFamilies');
             
-            if (allFamilies) {
-                const families = allFamilies.querySelectorAll('.col-md-6');
-                families.forEach(family => {
-                    const info = family.querySelector('.family-name');
-                    if (info) {
-                        const familyName = info.textContent.toLowerCase();
-                        family.style.display = familyName.includes(value) ? '' : 'none';
-                    }
-                });
-            }
-        });
-    }
+        if (allFamilies) {
+            const families = allFamilies.querySelectorAll('.col-md-6');
+            families.forEach(family => {
+                const info = family.querySelector('.family-name');
+                if (info) {
+                    const familyName = info.textContent.toLowerCase();
+                    family.style.display = familyName.includes(value) ? '' : 'none';
+                }
+            });
+        }
+    });
+}
 
+const editBtn = document.querySelector('.btn-edit-children');
+if (editBtn) {
 
-    const editBtn = document.querySelector('.btn-edit-children');
-    if (editBtn) {
-        editBtn.addEventListener('click', () => {
-            
-            const familyIdInput = document.getElementById('familyId');
-            
+    // This function...
+    editBtn.addEventListener('click', () => {         
+        const familyIdInput = document.getElementById('familyId');
             if (familyIdInput && familyIdInput.value) {
                 updateChildren(familyIdInput.value);
-            }
-        });
-    }
-
-
-    orderFamilies();
-});
+        }
+    });
+}
 
 function displayForm(event) {
+
+    // This function...
     closeFormUpdate(event);
     const form = document.getElementById('popForm');
     form.style.display = 'block';
 }
 
 function closeForm(event) {
+
+    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('popForm');
     form.scrollTop = 0;
@@ -65,37 +56,43 @@ function closeForm(event) {
 }
 
 function displayFormUpdate() {
+    
+    // This function...
     closeForm();
     const form = document.getElementById('popFormUpdate');
     form.style.display = 'block';
 }
 
 function closeFormUpdate(event) {
+
+    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('popFormUpdate');
     form.scrollTop = 0;
     form.style.display = 'none';
-    orderFamilies();
 }
 
 function displayFormUpdateChildren() {
-    //closeForm();
+
+    // This function...
     const form = document.getElementById('popFormUpdateChildren');
     form.style.display = 'block';
 }
 
 function closeFormUpdateChildren(event) {
+
+    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('popFormUpdateChildren');
     form.scrollTop = 0;
     form.style.display = 'none';
     const container = document.getElementById("childrenContainerUpdate");
-    //const row = document.createElement("tr");
-    //row.className = "child-update-item";
     container.innerHTML = "";
 }
 
 async function showAllFamilies() {
+
+    // This function...
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
     if (!container) return;
@@ -110,8 +107,8 @@ async function showAllFamilies() {
         if (!response.ok) throw new Error('Network response was not ok');
 
         const data = await response.json();
+        
         numberFamily.innerHTML = data.length
-        console.log(data.length)
         data.forEach(family => {
             container.appendChild(createFamilyCard(family));
         });
@@ -122,6 +119,8 @@ async function showAllFamilies() {
 }
 
 function createFamilyCard(family) {
+
+    // This function...
     const template = document.getElementById('family-card-template');
     const clone = template.content.cloneNode(true);
 
@@ -147,8 +146,8 @@ function createFamilyCard(family) {
 
 function addFamily(event) {
 
+    // This function...
     event.preventDefault();
-
     const children = [];
     document.querySelectorAll('.child-item').forEach(child => {
         const name = child.querySelector('.child-name').value.trim();
@@ -164,20 +163,17 @@ function addFamily(event) {
         address: document.getElementById('address').value.trim(),
         neighborhood: document.getElementById('neighborhood').value.trim(),
         phone: document.getElementById('phone').value.trim(),
-        //residents: parseInt(document.getElementById('residents').value) || 0,
         men: parseInt(document.getElementById('men').value) || 0,
         women: parseInt(document.getElementById('women').value) || 0,
         children: children.length,
         status: document.getElementById('status').value.trim(),
     };
-    console.log(children.length)
-    console.log(family)
+        
     if (!family.name || !family.address || !family.neighborhood || !family.phone) {
         alert("Please fill in all required fields.");
         return;
     }
     
-
     const familyChildWrapperDto = {
         familyDto: family,
         childrenDto: children
@@ -204,14 +200,12 @@ function addFamily(event) {
     });
 }
 
-function editFamilyLoad(id) {
-    
+async function editFamilyLoad(id) {
+
+    // This function...
     displayFormUpdate();
-    /*
-    const editBtn = document.querySelector('.btn-edit-children');
-    editBtn.addEventListener('click', () => updateChildren(id));
-    */
-    fetch(`http://localhost:8080/get_family/${id}`)
+    
+    await fetch(`http://localhost:8080/get_family/${id}`)
         .then(response => response.json())
         .then(family => {
             document.getElementById('familyId').value = family.id;
@@ -219,7 +213,6 @@ function editFamilyLoad(id) {
             document.getElementById('addressUpdate').value = family.address;
             document.getElementById('neighborhoodUpdate').value = family.neighborhood;
             document.getElementById('phoneUpdate').value = family.phone;
-            //document.getElementById('residentsUpdate').value = family.residents;
             document.getElementById('menUpdate').value = family.men;
             document.getElementById('womenUpdate').value = family.women;
             document.getElementById('childrenUpdate').value = family.children;
@@ -232,6 +225,8 @@ function editFamilyLoad(id) {
 }
 
 function updateFamily(event) {
+
+    // This function...
     event.preventDefault();
 
     const family = {
@@ -240,7 +235,6 @@ function updateFamily(event) {
         address: document.getElementById('addressUpdate').value.trim(),
         neighborhood: document.getElementById('neighborhoodUpdate').value.trim(),
         phone: document.getElementById('phoneUpdate').value.trim(),
-        //residents: parseInt(document.getElementById('residentsUpdate').value) || 0,
         men: parseInt(document.getElementById('menUpdate').value) || 0,
         women: parseInt(document.getElementById('womenUpdate').value) || 0,
         children: parseInt(document.getElementById('childrenUpdate').value) || 0,
@@ -278,6 +272,8 @@ function updateFamily(event) {
 }
 
 function deleteFamily(id) {
+
+    // This function...
     if (!confirm("Are you sure you want to delete this family?")) {
         return;
     }
@@ -297,8 +293,9 @@ function deleteFamily(id) {
 }
 
 async function orderFamilies() {
+    
+    // This function...
     await showAllFamilies();
-
     const allFamilies = document.querySelector('#showAllFamilies');
     const families = Array.from(allFamilies.querySelectorAll('.col-md-6'));
 
@@ -312,21 +309,21 @@ async function orderFamilies() {
 
     const nameA = a.querySelector('.family-name').textContent.trim().toLowerCase();
     const nameB = b.querySelector('.family-name').textContent.trim().toLowerCase();
-    
+   
     return nameA.localeCompare(nameB);
-});
+    });
 
     allFamilies.innerHTML = '';
     families.forEach(family => allFamilies.appendChild(family));
 }
 
 function addChild(item) {
-    const container = document.getElementById(item);
-    if (!container) return; // Evita erros caso o container não exista na tela
 
-    const row = document.createElement("tr");
-    
-    // Definimos as classes dos inputs dinamicamente com base no container
+    // This function...
+    const container = document.getElementById(item);
+    if (!container) return;
+
+    const row = document.createElement("tr");  
     let rowClass = "child-item";
     let nameClass = "child-name";
     let birthClass = "child-birth";
@@ -360,14 +357,13 @@ function addChild(item) {
 }
 
 async function updateChildren(id) {
-    displayFormUpdateChildren();
     
-    // Limpa a tabela antes de carregar os filhos da nova família consultada
+    // This function...
+    displayFormUpdateChildren();
     const container = document.getElementById("childrenContainerUpdate");
     container.innerHTML = ""; 
     
     document.getElementById('familyIdChildrenUpdate').value = id;
-    
     const response = await fetch(`http://localhost:8080/get_children_by_family/${id}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
@@ -401,6 +397,7 @@ async function updateChildren(id) {
 
 function updateChildrenAll(event) {
 
+    // This function...
     event.preventDefault();
     const id = document.getElementById("familyIdChildrenUpdate").value;
     
@@ -420,7 +417,6 @@ function updateChildrenAll(event) {
         address: document.getElementById('addressUpdate').value.trim(),
         neighborhood: document.getElementById('neighborhoodUpdate').value.trim(),
         phone: document.getElementById('phoneUpdate').value.trim(),
-        //residents: parseInt(document.getElementById('residentsUpdate').value) || 0,
         men: parseInt(document.getElementById('menUpdate').value) || 0,
         women: parseInt(document.getElementById('womenUpdate').value) || 0,
         children: parseInt(document.getElementById('childrenUpdate').value) || 0,
@@ -432,7 +428,6 @@ function updateChildrenAll(event) {
         childrenDto: childrenUpdate
     };
 
-    console.log(childrenUpdate)
     fetch(`http://localhost:8080/update_children_by_family_id/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -441,8 +436,6 @@ function updateChildrenAll(event) {
     .then(response => {
         if (response.ok) {
             alert("Family updated successfully!");
-            //orderFamilies();
-            //closeFormUpdate();
             closeFormUpdateChildren();
         } else {
             alert("Failed to update children.");
@@ -453,3 +446,5 @@ function updateChildrenAll(event) {
         alert("Error updating children.");
     });
 }
+
+orderFamilies();

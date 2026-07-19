@@ -1,10 +1,16 @@
+const btnCloseFormUpdate = document.getElementById('closeFormUpdate');
+    if (btnCloseFormUpdate) btnCloseFormUpdate.addEventListener('click', closeForm);
+
 function displayForm(event) {
-    //closeFormUpdate(event);
+
+    // This function...
     const form = document.getElementById('showFamily');
     form.style.display = 'block';
 }
 
 function closeForm(event) {
+
+    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
     form.scrollTop = 0;
@@ -92,7 +98,6 @@ async function showFamilyStatus() {
         select.addEventListener("change", () => { updateFamilyStatus(Number(familyIdShow)); });
         tableBody.appendChild(clone);
         count += 1;
-        //console.log(familyId)
     });
 
     document.getElementById("totalFamilies").textContent = totalFamilies;
@@ -105,9 +110,7 @@ function updateFamilyStatus(familyId) {
     // This function update the donation status.
     const date = getCurrentDate();
     const month = currentMonth();
-    //const month = "01/08/2026"
-    const familyStatusSelect =
-        document.getElementById(`family-select-${familyId}`);
+    const familyStatusSelect = document.getElementById(`family-select-${familyId}`);
     const selectedStatus = familyStatusSelect.value;
     let deliveryUpdate = null;
 
@@ -133,11 +136,9 @@ function updateFamilyStatus(familyId) {
     .catch(error => console.error(error));
 }
 
-const btnCloseFormUpdate = document.getElementById('closeFormUpdate');
-    if (btnCloseFormUpdate) btnCloseFormUpdate.addEventListener('click', closeForm);
-
 async function showFamilyInfo(familyId) {
 
+    // This function...
     displayForm();
     const resultContainer = document.getElementById('showFamily');
     resultContainer.innerHTML = '';
@@ -159,9 +160,13 @@ async function showFamilyInfo(familyId) {
 
         clone.querySelector('#family-name-show').textContent = data.name;
         clone.querySelector('#family-address-show').textContent = data.address;
+        clone.querySelector('#family-neighborhood-show').textContent = data.neighborhood;
         clone.querySelector('#family-phone-show').textContent = data.phone;
         clone.querySelector('#family-residents-show').textContent =
             data.men + data.women + data.children;
+        clone.querySelector('#family-men-show').textContent = data.men;
+        clone.querySelector('#family-women-show').textContent = data.women;
+        clone.querySelector('#family-children-show').textContent = data.children;
 
         populateTable(clone, data.donationList);
 
@@ -174,6 +179,8 @@ async function showFamilyInfo(familyId) {
 }
 
 function populateTable(clone, donationList) {
+
+    // This function...
     const table = clone.querySelector('#family-donation-show');
     if (!table) return;
 
@@ -184,12 +191,9 @@ function populateTable(clone, donationList) {
 
     let rows = '';
     donationList.slice(-6).forEach(donation => {
-        const date = new Date(donation.month);
-        const month = date.toLocaleDateString('pt-BR', {
-            month: 'long',
-            timeZone: 'UTC'
-        }).toLowerCase();
 
+        const date = new Date(donation.month);
+        const month = date.toLocaleDateString('pt-BR', { month: 'long', timeZone: 'UTC' }).toLowerCase();
         const deliveryDate = formatDeliveryDate(donation.delivery);
 
         rows += `
@@ -205,6 +209,8 @@ function populateTable(clone, donationList) {
 }
 
 function formatDeliveryDate(delivery) {
+
+    // This function...
     if (!delivery) return 'N/A';
 
     const deliveryDay = new Date(delivery);

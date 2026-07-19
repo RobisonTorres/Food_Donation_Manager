@@ -4,168 +4,229 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Food Manager | Donations</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-  <script src="script_index.js" defer></script>
+  <link href="./scripts/style/style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <script src="./scripts/script_index.js" defer></script>
 </head>
-<body class="bg-light">
-  <div class="container-fluid">
-    <div class="row">
-      <!-- SIDEBAR -->
-      <aside class="col-md-2 bg-dark text-white vh-500 p-0 shadow">
-        <div class="p-4 border-bottom">
-          <h4 class="fw-bold mb-0">
-            <i class="bi bi-box-seam"></i> Food Manager
-          </h4>
-        </div>
-        <div class="list-group list-group-flush">
-          <a href="index.html" class="list-group-item list-group-item-action">
-            <i class="bi bi-box2-heart me-2"></i> Donations
-          </a>
-          <a href="/family.html" class="list-group-item list-group-item-action">
-            <i class="bi bi-people me-2"></i> Families
-          </a>
-          <a href="/child.html" class="list-group-item list-group-item-action">
-            <i class="bi bi-person-heart me-2"></i> Children
-          </a>
-          <a href="/cards.html" class="list-group-item list-group-item-action">
-            <i class="bi bi-person-heart me-2"></i> Cards
-          </a>
-        </div>
-      </aside>
-      <!-- CONTENT -->
-      <main class="col-md-10">
-        <!-- TOP BAR -->
-        <div class="d-flex justify-content-between align-items-center bg-white shadow-sm p-3 mb-4">
-          <div>
-            <h3 class="mb-1">Monthly Donations</h3>
-            <small class="text-muted">Manage monthly food deliveries.</small>
-          </div>
-          <div id="date" class="fw-semibold fs-5"></div>
-        </div>
-        <!-- CARDS -->
-        <div class="row mb-4">
-          <div class="col-lg-4 mb-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <small class="text-muted">Registered Families</small>
-                <h2 id="totalFamilies">0</h2>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <small class="text-muted">Delivered</small>
-                <h2 id="totalDelivered" class="text-success">0</h2>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <small class="text-muted">Pending</small>
-                <h2 id="totalPending" class="text-danger">0</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-   <!-- TABLE -->
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-white">
-            <h5 class="mb-0">Donation List</h5>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th class="text-center">Number</th>
-                  <th class="text-center">Family</th>
-                  <th class="text-center">Status</th>
-                  <th class="text-center">Delivery Date</th>
-                  <th class="text-center">More Info</th>
-                </tr>
-              </thead>
-              <tbody id="familyTableNewBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </main>
+<body class="bg-light text-dark font-sans-serif">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-3">
+    <div class="container">
+      <h1 class="navbar-brand fw-bold mb-0 d-flex align-items-center">
+        <i class="bi bi-box-seam me-2 text-success"></i> Food Manager
+      </h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link active px-3 rounded bg-secondary bg-opacity-25" href="index.html">Donations</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="/family.html">Families</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="/child.html">Children</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="/cards.html">Cards</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
+
+  <div class="container my-4">
+    <main>
+      
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center bg-white shadow-sm rounded-4 p-4 mb-4 border border-light">
+        <div>
+          <h3 class="mb-1 fw-bold text-dark">Monthly Donations</h3>
+          <small class="text-muted fs-6">Manage monthly food deliveries and tracking.</small>
+        </div>
+        <div id="date" class="fw-bold fs-5 text-success mt-3 mt-sm-0 bg-success bg-opacity-10 px-3 py-2 rounded-3"></div>
+      </div>
+
+      <div class="row mb-4 g-3">
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm h-100 rounded-4">
+            <div class="card-body d-flex align-items-center justify-content-between p-4">
+              <div>
+                <small class="text-muted text-uppercase fw-semibold tracking-wider">Registered Families</small>
+                <h2 id="totalFamilies" class="fw-bold display-6 mt-1 mb-0">0</h2>
+              </div>
+              <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-3">
+                <i class="bi bi-people-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm h-100 rounded-4">
+            <div class="card-body d-flex align-items-center justify-content-between p-4">
+              <div>
+                <small class="text-muted text-uppercase fw-semibold tracking-wider">Delivered</small>
+                <h2 id="totalDelivered" class="text-success fw-bold display-6 mt-1 mb-0">0</h2>
+              </div>
+              <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-3">
+                <i class="bi bi-check-circle-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card border-0 shadow-sm h-100 rounded-4">
+            <div class="card-body d-flex align-items-center justify-content-between p-4">
+              <div>
+                <small class="text-muted text-uppercase fw-semibold tracking-wider">Pending</small>
+                <h2 id="totalPending" class="text-danger fw-bold display-6 mt-1 mb-0">0</h2>
+              </div>
+              <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-3">
+                <i class="bi bi-exclamation-circle-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-white py-3 border-bottom border-light">
+          <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+            <i class="bi bi-list-ul me-2 text-muted"></i> Donation List
+          </h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-uppercase fs-7 border-bottom">
+              <tr>
+                <th class="text-center py-3 text-muted fw-semibold">Number</th>
+                <th class="text-start py-3 text-muted fw-semibold ps-4">Family</th>
+                <th class="text-center py-3 text-muted fw-semibold">Status</th>
+                <th class="text-center py-3 text-muted fw-semibold">Delivery Date</th>
+                <th class="text-center py-3 text-muted fw-semibold">More Info</th>
+              </tr>
+            </thead>
+            <tbody id="familyTableNewBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
+
   <div>
-  <!-- TEMPLATE -->
-  <template id="familyRowTemplate">
-    <tr class="family-status">
-      <td class="family-id" hidden></td>
-      <td class="family-number fw-semibold text-center"></td>
-      <td class="family-name fw-semibold text-left" ></td>
-      <td class="text-center">
-        <select class="form-select form-select-sm family-select mx-auto" style="max-width: 150px;">
-          <option value="PENDENT">❌ PENDENT</option>
-          <option value="OK">✅ OK</option>
-        </select>
-      </td>
-      <td class="family-delivery text-muted text-center"></td>
-      <td class="family-info">
-        <button type="button"
-                    class="btn btn-primary btn-sm"
-                    >
-                <i class="fas fa-plus me-1"></i>
-                Family's Info
-            </button>
-      </td>
-    </tr>
-  </template>
+    <template id="familyRowTemplate">
+      <tr class="family-status align-middle border-bottom border-light">
+        <td class="family-id" hidden></td>
+        <td class="family-number fw-bold text-center text-secondary py-3"></td>
+        <td class="family-name fw-semibold text-start ps-4"></td>
+        <td class="text-center">
+          <select class="form-select form-select-sm family-select mx-auto shadow-sm border-light-subtle rounded-3" style="max-width: 150px; font-weight: 500;">
+            <option value="PENDENT">❌ PENDENT</option>
+            <option value="OK">✅ OK</option>
+          </select>
+        </td>
+        <td class="family-delivery text-muted text-center fw-medium"></td>
+        <td class="family-info text-center">
+          <button type="button" class="btn btn-info-soft btn btn-light btn-sm fw-medium border shadow-sm px-3 rounded-3 text-primary">
+            <i class="bi bi-info-circle me-1"></i> Family's Info
+          </button>
+        </td>
+      </tr>
+    </template>
   </div>
-  <div id="showFamily" class="form-popup" 
-    style="display:none; max-width:400px;">
-    
+
+  <div id="showFamily" class="form-popup position-fixed top-50 start-50 translate-middle bg-white p-4 shadow-lg rounded-4 border border-light-subtle" 
+     style="display:none; max-width:550px; width: 90%; z-index: 1050;">
+  
   </div>
 
   <template id="info-template">
+    <div class="card-info-container">
 
-      <div class="card-info-container">
-      <h5 class="card-title text-center text-success mb-4">
-                    <i class="fas fa-users me-2"></i>
-                    <span id="family-name-show"></span>
-                </h5>
+      <div class="text-center mb-4">
+        <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
+          <i class="fas fa-users text-success fs-4"></i>
+        </div>
+        <h4 class="card-title text-success fw-bold mb-0">
+          <span id="family-name-show"></span>
+        </h4>
+      </div>
 
-                <p class="card-text mb-2">
-                    <i class="fas fa-location-dot me-2 text-muted"></i>
-                    <strong>Address:</strong>
-                    <span id="family-address-show"></span>
-                </p>
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-7 d-flex align-items-start">
+          <i class="fas fa-location-dot mt-1 me-2 text-success fs-5 flex-shrink-0" style="width: 20px;"></i>
+          <div>
+            <strong class="d-block text-muted small text-uppercase fw-semibold tracking-wider">Address</strong>
+            <span id="family-address-show" class="fw-medium"></span>
+            <span class="text-muted">-</span>
+            <span id="family-neighborhood-show" class="fw-medium text-capitalize"></span>
+          </div>
+        </div>
+        
+        <div class="col-12 col-sm-5 d-flex align-items-start border-start-sm">
+          <i class="fas fa-phone mt-1 me-2 text-success fs-5 flex-shrink-0" style="width: 20px;"></i>
+          <div>
+            <strong class="d-block text-muted small text-uppercase fw-semibold tracking-wider">Phone</strong>
+            <span id="family-phone-show" class="fw-medium"></span>
+          </div>
+        </div>
+      </div>
 
-                <p class="card-text mb-2">
-                    <i class="fas fa-phone me-2 text-muted"></i>
-                    <strong>Phone:</strong>
-                    <span id="family-phone-show"></span>
-                </p>
+      <div class="bg-light p-3 rounded-3 mb-4 border border-light-subtle">
+        <strong class="d-block text-muted small text-uppercase fw-bold mb-2 tracking-wider">
+          <i class="fas fa-user-group me-1 text-success"></i> Family Composition
+        </strong>
+        
+        <div class="row g-2 text-center">
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-2 border border-success-subtle shadow-sm">
+              <span class="d-block text-muted small fw-medium">Total</span>
+              <span id="family-residents-show" class="fw-bold fs-5 text-success"></span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-2 border border-success-subtle shadow-sm">
+              <span class="d-block text-muted small fw-medium">Men</span>
+              <span id="family-men-show" class="fw-bold fs-5 text-success"></span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-2 border border-success-subtle shadow-sm">
+              <span class="d-block text-muted small fw-medium">Women</span>
+              <span id="family-women-show" class="fw-bold fs-5 text-success"></span>
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="bg-white p-2 rounded-2 border border-success-subtle shadow-sm">
+              <span class="d-block text-muted small fw-medium">Kids</span>
+              <span id="family-children-show" class="fw-bold fs-5 text-success"></span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <p class="card-text mb-2">
-                    <i class="fas fa-user-group me-2 text-muted"></i>
-                    <strong>Residents:</strong>
-                    <span id="family-residents-show"></span>
-                </p>
-                <hr>
-                <table class="table table-hover align-middle mb-0">
-                  <thead>
-                    <th>Month</th>
-                    <th>Status</th>
-                    <th>Day</th>
-                  </thead>
-                  <tbody id="family-donation-show">
-                      
-                  </tbody>
-                </table>
-                <button type="button" class="btn btn-outline-primary flex-grow-1" onclick="closeForm()">
-                  Close
-                </button>
-              </div>
-    </template>
-</div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+      <div class="mb-2">
+        <strong class="d-block text-muted small text-uppercase fw-bold mb-2 tracking-wider">
+          <i class="fas fa-calendar-check me-1 text-success"></i> Donations
+        </strong>
+      </div>
+      <div class="table-responsive rounded-3 border mb-4">
+        <table class="table table-sm table-hover align-middle mb-0">
+          <thead class="table-light text-center text-capitalize">
+            <tr>
+              <th class="ps-3 py-2 text-muted fw-semibold">Month</th>
+              <th class="py-2 text-muted fw-semibold">Status</th>
+              <th class="pe-3 py-2 text-muted fw-semibold">Day</th>
+            </tr>
+          </thead>
+          <tbody id="family-donation-show" class="text-center small text-capitalize">
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d-grid">
+        <button type="button" class="btn btn-outline-success fw-semibold py-2 rounded-3" onclick="closeForm()">
+          <i class="bi bi-x-lg me-1"></i> Close
+        </button>
+      </div>
+      
+    </div>
+  </template>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
