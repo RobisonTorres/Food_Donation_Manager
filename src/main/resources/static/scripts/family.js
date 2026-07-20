@@ -12,15 +12,15 @@ if (search) {
         const allFamilies = document.querySelector('#showAllFamilies');
             
         if (allFamilies) {
-            const families = allFamilies.querySelectorAll('.col-md-6');
-            families.forEach(family => {
-                const info = family.querySelector('.family-name');
-                if (info) {
-                    const familyName = info.textContent.toLowerCase();
-                    family.style.display = familyName.includes(value) ? '' : 'none';
-                }
-            });
-        }
+        const families = allFamilies.querySelectorAll('tr');
+        families.forEach(family => {
+            const info = family.querySelector('.family-name');
+            if (info) {
+                const familyName = info.textContent.toLowerCase();
+                family.style.display = familyName.includes(value) ? '' : 'none';
+            }
+        });
+    }
     });
 }
 
@@ -91,10 +91,11 @@ function closeFormUpdateChildren(event) {
 }
 
 async function showAllFamilies() {
-
-    // This function...
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
+    let numberActiveFamilies = document.getElementById('totalActiveFamilies');
+    let numberInactiveFamilies = document.getElementById('totalInactiveFamilies');
+
     if (!container) return;
     container.innerHTML = '';
 
@@ -108,33 +109,60 @@ async function showAllFamilies() {
 
         const data = await response.json();
         
-        numberFamily.innerHTML = data.length
+        if (numberFamily) numberFamily.innerHTML = data.length;
+        let count = 0;
+        
+        // --- ORDENAÇÃO DIRETO NOS DADOS ---
+        data.sort((a, b) => {
+            // Primeiro por Status ("YES" no topo)
+            if (a.status !== b.status) {
+                return a.status === "YES" ? -1 : 1;
+            }
+            // Segundo por Nome alfabético
+            return a.name.localeCompare(b.name);
+        });
+        // ----------------------------------
+
         data.forEach(family => {
             container.appendChild(createFamilyCard(family));
+            if (family.status === "YES"){
+                count += 1;
+            }
         });
+        
+        if (numberActiveFamilies) numberActiveFamilies.innerHTML = count;
+        if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = data.length - count;
+
     } catch (error) {
         console.error('Error fetching families:', error);
-        container.innerHTML = '<div class="col-12 text-center text-danger">Error loading families.</div>';
+        container.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4 fw-medium">Error loading families.</td></tr>';
     }
 }
 
 function createFamilyCard(family) {
-
-    // This function...
     const template = document.getElementById('family-card-template');
     const clone = template.content.cloneNode(true);
 
+    // Mapeamento de dados idêntico ao original
     clone.querySelector('.family-name').textContent = family.name;
     clone.querySelector('.family-address').textContent = family.address;
     clone.querySelector('.family-neighborhood').textContent = family.neighborhood;
     clone.querySelector('.family-phone').textContent = family.phone;
-    clone.querySelector('.family-residents').textContent = family.men + family.women + family.children;
-    family.residents = family.men + family.women + family.children;
+    
+    family.residents = (Number(family.men) || 0) + (Number(family.women) || 0) + (Number(family.children) || 0);
+    clone.querySelector('.family-residents').textContent = family.residents;
+    /*
     clone.querySelector('.family-men').textContent = family.men;
     clone.querySelector('.family-women').textContent = family.women;
     clone.querySelector('.family-children').textContent = family.children;
-    clone.querySelector('.family-status').textContent = family.status;
+    */
+    // Tratamento estético do Status mantendo a classe original
+    const statusEl = clone.querySelector('.family-status');
+    statusEl.textContent = family.status === "YES" ? "Active" : "Inactive";
+    statusEl.classList.add(family.status === "YES" ? "bg-success-subtle" : "bg-danger-subtle");
+    statusEl.classList.add(family.status === "YES" ? "text-success" : "text-danger");
 
+    // Listeners de eventos mantidos idênticos
     const editBtn = clone.querySelector('.btn-edit');
     editBtn.addEventListener('click', () => editFamilyLoad(family.id));
 
@@ -259,7 +287,8 @@ function updateFamily(event) {
     .then(response => {
         if (response.ok) {
             alert("Family updated successfully!");
-            orderFamilies();
+            //orderFamilies();
+            showAllFamilies();
             closeFormUpdate();
         } else {
             alert("Failed to update family.");
@@ -284,37 +313,12 @@ function deleteFamily(id) {
     .then(response => {
         if (response.ok) {
             alert("Family deleted successfully.");
-            orderFamilies();
+            showAllFamilies();
         } else {
             alert("Failed to delete family.");
         }
     })
     .catch(error => console.error(error));
-}
-
-async function orderFamilies() {
-    
-    // This function...
-    await showAllFamilies();
-    const allFamilies = document.querySelector('#showAllFamilies');
-    const families = Array.from(allFamilies.querySelectorAll('.col-md-6'));
-
-    families.sort((a, b) => {
-    const statusA = a.querySelector('.family-status').textContent.trim().toLowerCase();
-    const statusB = b.querySelector('.family-status').textContent.trim().toLowerCase();
-
-    if (statusA !== statusB) {
-        return statusA === 'yes' ? -1 : 1;
-    }
-
-    const nameA = a.querySelector('.family-name').textContent.trim().toLowerCase();
-    const nameB = b.querySelector('.family-name').textContent.trim().toLowerCase();
-   
-    return nameA.localeCompare(nameB);
-    });
-
-    allFamilies.innerHTML = '';
-    families.forEach(family => allFamilies.appendChild(family));
 }
 
 function addChild(item) {
@@ -447,4 +451,4 @@ function updateChildrenAll(event) {
     });
 }
 
-orderFamilies();
+showAllFamilies();

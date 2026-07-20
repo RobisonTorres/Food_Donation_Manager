@@ -1,6 +1,4 @@
 function currentMonth() {
-
-    // This function returns the current month.
     const today = new Date();
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
@@ -8,12 +6,13 @@ function currentMonth() {
 }
 
 async function generateCards() {
-
-    // This Function...
-    let output = "";
+    const container = document.getElementById('representatives');
+    if (!container) return;
+    container.innerHTML = "";
+    
     try {
         const month = currentMonth();
-        const response =  await fetch(`http://localhost:8080/get_all_families_active_by_month?month=${month}`, {
+        const response = await fetch(`http://localhost:8080/get_all_families_active_by_month?month=${month}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -24,23 +23,35 @@ async function generateCards() {
 
         const families = await response.json();
 
+        if (families.length === 0) {
+            container.innerHTML = `<div class="col-12 text-center text-muted py-5 no-print fw-medium">No active families found for this month.</div>`;
+            return;
+        }
+
         families.forEach(family => {
-            output += `
-                        <div class="col-6">
-                            <div class="border rounded p-3 text-center fw-semibold">
-                                ${family.familyName}
-                            </div>
-                        </div>
-                        `;
+            // Injeta o card quadrado puro, sem margem lateral e com fonte grande (fs-3)
+            container.insertAdjacentHTML('beforeend', `
+                <div class="label-card text-dark fw-bold text-uppercase">
+                    ${family.familyName ?? 'N/A'}
+                </div>
+            `);
         });
 
     } catch (error) {
         console.error(error);
-        output = `<div 
-                        class="col-12 text-center text-danger">Error loading families.
-                   </div>`;
-    }   
-    document.getElementById('representatives').innerHTML = output;            
+        container.innerHTML = `<div class="col-12 text-center text-danger py-5 no-print fw-medium">Error loading families.</div>`;
+    } 
 }
 
+function hideAndPrint() {
+    const panel = document.getElementById('printPanel');
+    panel.style.display = 'none';
+    window.print();
+    // Restaura o painel depois que o diálogo de impressão fecha
+    setTimeout(() => {
+        panel.style.display = '';
+    }, 500);
+}
+
+// Inicializa a geração dos cards
 generateCards();

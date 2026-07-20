@@ -1,6 +1,4 @@
 async function showAllChildren() {
-
-    // This function
     const container = document.getElementById('showAllChildren');
     if (!container) return;
     container.innerHTML = '';
@@ -16,67 +14,52 @@ async function showAllChildren() {
         if (!response.ok) { throw new Error('Network response was not ok'); }
 
         const families = await response.json();
-        const children = document.getElementById('active-children');
-        let active = 0;
+        const childrenCountElement = document.getElementById('active-children');
+        let activeChildrenTotal = 0;
+        let count = 1;
+
         families.forEach(family => {
-            container.appendChild(createChildCard(family));
-            active += family.childList.length;
+            if (family.childList && family.childList.length > 0) {
+                family.childList.forEach(child => {
+                    container.appendChild(createChildRow(family, child, count));
+                    activeChildrenTotal++;
+                    count++;
+                });
+            }
         });
 
-        children.innerHTML = active;
+        if (childrenCountElement) {
+            childrenCountElement.innerHTML = activeChildrenTotal;
+        }
+
+        if (activeChildrenTotal === 0) {
+            container.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4 fw-medium">No registered children found.</td></tr>';
+        }
 
     } catch (error) {
         console.error(error);
-        container.innerHTML =
-            '<div class="col-12 text-center text-danger">Error loading Children.</div>';
+        container.innerHTML = '<tr><td colspan="5" class="text-center text-danger py-4 fw-medium">Error loading Children.</td></tr>';
     }
 }
 
-function createChildCard(family) {
+function createChildRow(family, child, count) {
 
-    // This function
-    const template = document.getElementById('family-child-card-template');
+    const template = document.getElementById('family-child-row-template');
     const clone = template.content.cloneNode(true);
+    let age = typeof calculateAge === 'function' ? calculateAge(child.birthDate) : 'N/A';
 
+    clone.querySelector('.child-number').textContent = count;
+    clone.querySelector('.child-name').textContent = child.name ?? 'N/A';
+    clone.querySelector('.child-age').textContent = `${age} yrs`;
     clone.querySelector('.family-name').textContent = family.familyName ?? 'N/A';
-    clone.querySelector('.family-address').textContent = family.familyAddress ?? 'N/A';
     clone.querySelector('.family-phone').textContent = family.phone ?? 'N/A';
-
-    const childList = clone.querySelector('.child-list');
-
-    if (family.childList && family.childList.length > 0) {
-
-        family.childList.forEach(child => {
-            const li = document.createElement('li');
-            let age = calculateAge(child.birthDate)
-            
-            li.className = 'list-group-item d-flex justify-content-between align-items-center';
-            li.innerHTML = `
-                <div>
-                    <strong>${child.name}</strong><br>
-                    <small class="text-muted">
-                        <i class="fas me-1"></i>
-                        age ${age}
-                    </small>
-                </div>
-            `;
-            childList.appendChild(li);
-        });
-
-    } else {
-
-        const li = document.createElement('li');
-        li.className = 'list-group-item text-center text-muted';
-        li.textContent = 'No registered children';
-        childList.appendChild(li);
-    }
+    clone.querySelector('.family-address').textContent = family.familyAddress ?? 'N/A';
 
     return clone;
 }
 
 function formatDate(dateString) {
 
-    // This function...
     if (!dateString) return '';
     const birthDate = new Date(dateString)
     birthDate.setDate(birthDate.getDate() + 1);
@@ -88,11 +71,10 @@ function formatDate(dateString) {
 
 function calculateAge(birthDateString) {
 
-    // This function...
     const today = new Date();
     const birthDate = new Date(birthDateString);
     let age = today.getFullYear() - birthDate.getFullYear();
-    
+
     const monthDifference = today.getMonth() - birthDate.getMonth();
     const dayDifference = today.getDate() - birthDate.getDate();
 

@@ -1,3 +1,7 @@
+/* ==========================================================================
+   1. Componentes Gerais do Sistema (Popups e Botões Especiais)
+   ========================================================================== */
+
 .form-popup {
     display: none;
     position: fixed;
@@ -16,20 +20,64 @@
 }
 
 .btn-info-soft {
-  background: #e0edff;
-  color: #2563eb;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: .82rem;
-  padding: .4rem .8rem;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  transition: all .15s ease;
+    background: #e0edff;
+    color: #2563eb;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: .82rem;
+    padding: .4rem .8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    transition: all .15s ease;
 }
 
 .btn-info-soft:hover {
-  background: #2563eb;
-  color: #fff;
+    background: #2563eb;
+    color: #fff;
+}
+
+/* ==========================================================================
+   2. Sistema de Etiquetas para Sacolas (Cards de Entrega)
+   ========================================================================== */
+
+.label-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.label-card {
+    border: 2px solid #212529 !important; /* Borda escura e visível para o corte */
+    border-radius: 0 !important;          /* Cantos retos e perfeitos para colagem contígua */
+    padding: 2.5rem 1.5rem;               /* Espaçamento interno ideal para o texto */
+    font-size: 1.75rem;                    /* Nomes das famílias bem grandes e chamativos */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 140px;
+    margin: 0;                            /* Remove quaisquer margens para colar os quadrados */
+}
+
+/* ==========================================================================
+   3. Regras de Otimização para Impressão Física
+   ========================================================================== */
+
+@media print {
+    /* Esconde elementos de navegação, cabeçalhos de tela e botões no papel */
+    nav, 
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Força a folha a focar 100% no aproveitamento de espaço das etiquetas */
+    body, 
+    .container {
+        background-color: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
 }
