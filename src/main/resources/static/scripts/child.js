@@ -1,4 +1,6 @@
 async function showAllChildren() {
+
+    // This function...
     const container = document.getElementById('showAllChildren');
     if (!container) return;
     container.innerHTML = '';
@@ -44,6 +46,7 @@ async function showAllChildren() {
 
 function createChildRow(family, child, count) {
 
+    // This function...
     const template = document.getElementById('family-child-row-template');
     const clone = template.content.cloneNode(true);
     let age = typeof calculateAge === 'function' ? calculateAge(child.birthDate) : 'N/A';
@@ -60,6 +63,7 @@ function createChildRow(family, child, count) {
 
 function formatDate(dateString) {
 
+    // This function...
     if (!dateString) return '';
     const birthDate = new Date(dateString)
     birthDate.setDate(birthDate.getDate() + 1);
@@ -71,10 +75,10 @@ function formatDate(dateString) {
 
 function calculateAge(birthDateString) {
 
+    // This function...
     const today = new Date();
     const birthDate = new Date(birthDateString);
     let age = today.getFullYear() - birthDate.getFullYear();
-
     const monthDifference = today.getMonth() - birthDate.getMonth();
     const dayDifference = today.getDate() - birthDate.getDate();
 

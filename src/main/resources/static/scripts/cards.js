@@ -1,4 +1,6 @@
 function currentMonth() {
+
+    // This function...
     const today = new Date();
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
@@ -6,6 +8,8 @@ function currentMonth() {
 }
 
 async function generateCards() {
+
+    // This function
     const container = document.getElementById('representatives');
     if (!container) return;
     container.innerHTML = "";
@@ -29,7 +33,6 @@ async function generateCards() {
         }
 
         families.forEach(family => {
-            // Injeta o card quadrado puro, sem margem lateral e com fonte grande (fs-3)
             container.insertAdjacentHTML('beforeend', `
                 <div class="label-card text-dark fw-bold text-uppercase">
                     ${family.familyName ?? 'N/A'}
@@ -44,14 +47,14 @@ async function generateCards() {
 }
 
 function hideAndPrint() {
+
+    // This function...
     const panel = document.getElementById('printPanel');
     panel.style.display = 'none';
     window.print();
-    // Restaura o painel depois que o diálogo de impressão fecha
     setTimeout(() => {
         panel.style.display = '';
     }, 500);
 }
 
-// Inicializa a geração dos cards
 generateCards();

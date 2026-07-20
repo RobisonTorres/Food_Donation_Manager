@@ -91,6 +91,8 @@ function closeFormUpdateChildren(event) {
 }
 
 async function showAllFamilies() {
+
+    // This function...
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
     let numberActiveFamilies = document.getElementById('totalActiveFamilies');
@@ -112,16 +114,12 @@ async function showAllFamilies() {
         if (numberFamily) numberFamily.innerHTML = data.length;
         let count = 0;
         
-        // --- ORDENAÇÃO DIRETO NOS DADOS ---
         data.sort((a, b) => {
-            // Primeiro por Status ("YES" no topo)
             if (a.status !== b.status) {
                 return a.status === "YES" ? -1 : 1;
             }
-            // Segundo por Nome alfabético
             return a.name.localeCompare(b.name);
         });
-        // ----------------------------------
 
         data.forEach(family => {
             container.appendChild(createFamilyCard(family));
@@ -140,10 +138,11 @@ async function showAllFamilies() {
 }
 
 function createFamilyCard(family) {
+
+    // This function...
     const template = document.getElementById('family-card-template');
     const clone = template.content.cloneNode(true);
 
-    // Mapeamento de dados idêntico ao original
     clone.querySelector('.family-name').textContent = family.name;
     clone.querySelector('.family-address').textContent = family.address;
     clone.querySelector('.family-neighborhood').textContent = family.neighborhood;
@@ -151,18 +150,12 @@ function createFamilyCard(family) {
     
     family.residents = (Number(family.men) || 0) + (Number(family.women) || 0) + (Number(family.children) || 0);
     clone.querySelector('.family-residents').textContent = family.residents;
-    /*
-    clone.querySelector('.family-men').textContent = family.men;
-    clone.querySelector('.family-women').textContent = family.women;
-    clone.querySelector('.family-children').textContent = family.children;
-    */
-    // Tratamento estético do Status mantendo a classe original
+
     const statusEl = clone.querySelector('.family-status');
     statusEl.textContent = family.status === "YES" ? "Active" : "Inactive";
     statusEl.classList.add(family.status === "YES" ? "bg-success-subtle" : "bg-danger-subtle");
     statusEl.classList.add(family.status === "YES" ? "text-success" : "text-danger");
 
-    // Listeners de eventos mantidos idênticos
     const editBtn = clone.querySelector('.btn-edit');
     editBtn.addEventListener('click', () => editFamilyLoad(family.id));
 
@@ -287,7 +280,6 @@ function updateFamily(event) {
     .then(response => {
         if (response.ok) {
             alert("Family updated successfully!");
-            //orderFamilies();
             showAllFamilies();
             closeFormUpdate();
         } else {

@@ -162,8 +162,7 @@ async function showFamilyInfo(familyId) {
         clone.querySelector('#family-address-show').textContent = data.address;
         clone.querySelector('#family-neighborhood-show').textContent = data.neighborhood;
         clone.querySelector('#family-phone-show').textContent = data.phone;
-        clone.querySelector('#family-residents-show').textContent =
-            data.men + data.women + data.children;
+        clone.querySelector('#family-residents-show').textContent = data.men + data.women + data.children;
         clone.querySelector('#family-men-show').textContent = data.men;
         clone.querySelector('#family-women-show').textContent = data.women;
         clone.querySelector('#family-children-show').textContent = data.children;

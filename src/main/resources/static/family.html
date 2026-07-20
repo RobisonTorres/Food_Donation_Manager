@@ -12,479 +12,373 @@
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-3">
-    <div class="container">
-      <h1 class="navbar-brand fw-bold mb-0 d-flex align-items-center">
-        <i class="bi bi-box-seam me-2 text-success"></i> Food Manager
-      </h1>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link px-3" href="/index.html">Donations</a></li>
-          <li class="nav-item"><a class="nav-link active px-3 rounded bg-secondary bg-opacity-25" href="family.html">Families</a></li>
-          <li class="nav-item"><a class="nav-link px-3" href="/child.html">Children</a></li>
-          <li class="nav-item"><a class="nav-link px-3" href="/cards.html">Cards</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container py-4">
-       <div class="row mb-4 g-3">
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm h-100 rounded-4">
-            <div class="card-body d-flex align-items-center justify-content-between p-4">
-              <div>
-                <small class="text-muted text-uppercase fw-semibold tracking-wider">Registered Families</small>
-                <h2 id="totalFamilies" class="fw-bold display-6 mt-1 mb-0">0</h2>
-              </div>
-              <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-3">
-                <i class="bi bi-people-fill"></i>
-              </div>
+        <div class="container">
+            <h1 class="navbar-brand fw-bold mb-0 d-flex align-items-center">
+                <i class="bi bi-box-seam me-2 text-success"></i> Food Manager
+            </h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto gap-2">
+                    <li class="nav-item"><a class="nav-link px-3" href="/index.html">Donations</a></li>
+                    <li class="nav-item"><a class="nav-link active px-3 rounded bg-secondary bg-opacity-25" href="family.html">Families</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/child.html">Children</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="/cards.html">Cards</a></li>
+                </ul>
             </div>
-          </div>
         </div>
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm h-100 rounded-4">
-            <div class="card-body d-flex align-items-center justify-content-between p-4">
-              <div>
-                <small class="text-muted text-uppercase fw-semibold tracking-wider">Active Families</small>
-                <h2 id="totalActiveFamilies" class="text-success fw-bold display-6 mt-1 mb-0">0</h2>
-              </div>
-              <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-3">
-                <i class="bi bi-check-circle-fill"></i>
-              </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row mb-4 g-3">
+            <div class="col-12 col-md-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4">
+                    <div class="card-body d-flex align-items-center justify-content-between p-4">
+                        <div>
+                            <small class="text-muted text-uppercase fw-semibold tracking-wider">Registered Families</small>
+                            <h2 id="totalFamilies" class="fw-bold display-6 mt-1 mb-0">0</h2>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-3 fs-3">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <div class="card border-0 shadow-sm h-100 rounded-4">
-            <div class="card-body d-flex align-items-center justify-content-between p-4">
-              <div>
-                <small class="text-muted text-uppercase fw-semibold tracking-wider">Inactive Families</small>
-                <h2 id="totalInactiveFamilies" class="text-danger fw-bold display-6 mt-1 mb-0">0</h2>
-              </div>
-              <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-3">
-                <i class="bi bi-exclamation-circle-fill"></i>
-              </div>
+            <div class="col-12 col-md-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4">
+                    <div class="card-body d-flex align-items-center justify-content-between p-4">
+                        <div>
+                            <small class="text-muted text-uppercase fw-semibold tracking-wider">Active Families</small>
+                            <h2 id="totalActiveFamilies" class="text-success fw-bold display-6 mt-1 mb-0">0</h2>
+                        </div>
+                        <div class="bg-success bg-opacity-10 text-success p-3 rounded-3 fs-3">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="col-12 col-md-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4">
+                    <div class="card-body d-flex align-items-center justify-content-between p-4">
+                        <div>
+                            <small class="text-muted text-uppercase fw-semibold tracking-wider">Inactive Families</small>
+                            <h2 id="totalInactiveFamilies" class="text-danger fw-bold display-6 mt-1 mb-0">0</h2>
+                        </div>
+                        <div class="bg-danger bg-opacity-10 text-danger p-3 rounded-3 fs-3">
+                            <i class="bi bi-exclamation-circle-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
 
-    <section class="mb-4 d-flex">
-        <input id="searchFamily" type="text" class="form-control me-2" placeholder="Search family by name..." />
-        <button id="addNewFamily" class="btn btn-primary text-nowrap" onclick="document.getElementById('popForm').style.display='block'">
-            <i class="fas fa-plus me-1"></i> Add Family
-        </button>
-    </section>
+        <section class="mb-4 d-flex">
+            <input id="searchFamily" type="text" class="form-control me-2" placeholder="Search family by name..." />
+            <button id="addNewFamily" class="btn btn-primary text-nowrap" onclick="document.getElementById('popForm').style.display='block'">
+                <i class="fas fa-plus me-1"></i> Add Family
+            </button>
+        </section>
 
-    <section class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
-  <div class="card-header bg-white py-3 border-bottom border-light">
-    <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
-      <i class="bi bi-people-fill me-2 text-muted"></i> Families Registry
-    </h5>
-  </div>
-  <div class="table-responsive">
-    <table class="table align-middle mb-0">
-      <thead class="table-light text-uppercase fs-7 border-bottom">
-        <tr>
-          <th class="py-3 text-muted fw-semibold ps-4">Family / Contact</th>
-          <th class="py-3 text-muted fw-semibold">Address & Neighborhood</th>
-          <th class="text-center py-3 text-muted fw-semibold">Residents</th>
-          <th class="text-center py-3 text-muted fw-semibold">Status</th>
-          <th class="text-center py-3 text-muted fw-semibold pe-4">Actions</th>
-        </tr>
-      </thead>
-      <!-- O ID original do container foi movido para o tbody -->
-      <tbody id="showAllFamilies">
-        <!-- Inserido dinamicamente via JS -->
-      </tbody>
-    </table>
-  </div>
+        <section class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
+            <div class="card-header bg-white py-3 border-bottom border-light">
+                <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+                    <i class="bi bi-people-fill me-2 text-muted"></i> Families Registry
+                </h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light text-uppercase fs-7 border-bottom">
+                        <tr>
+                            <th class="py-3 text-muted fw-semibold ps-4">Family / Contact</th>
+                            <th class="py-3 text-muted fw-semibold">Address & Neighborhood</th>
+                            <th class="text-center py-3 text-muted fw-semibold">Residents</th>
+                            <th class="text-center py-3 text-muted fw-semibold">Status</th>
+                            <th class="text-center py-3 text-muted fw-semibold pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="showAllFamilies"></tbody>
+                </table>
+            </div>
 
-  <!-- NOVO TEMPLATE EM FORMATO DE TABELA (DUAS LINHAS POR REGISTRO) -->
-  <template id="family-card-template">
-    <!-- Linha Principal (Dados de Contato e Endereço) -->
-    <tr class="align-midd mb-5">
-      <td class="py-4 ps-5">
-        <div class="fw-bold text-dark fs-6">
-          <i class="fas fa-users me-2 text-success"></i><span class="family-name"></span>
-        </div>
-        <small class="text-muted d-block mt-1">
-          <i class="fas fa-phone me-1"></i> <span class="family-phone"></span>
-        </small>
-      </td>
-      <td class="py-4">
-        <span class="family-address fw-medium text-dark"></span>
-        <small class="d-block text-secondary mt-1">
-          <i class="fas fa-map me-1 text-muted"></i> <span class="family-neighborhood"></span>
-        </small>
-      </td>
-      <td class="text-center py-4">
-        <span class="family-residents fw-bold">0</span>
-      </td>
-      <td class="text-center py-4">
-        <span class="family-status badge rounded-pill px-3 py-2 fw-semibold"></span>
-      </td>
-      <td class="text-center py-4 pe-5">
-        <div class="d-flex justify-content-center gap-2">
-          <button class="btn btn-sm btn-light border btn-edit text-primary px-3 rounded-3 shadow-sm fw-medium">
-            <i class="fas fa-pen me-1"></i> Edit
-          </button>
-          <button class="btn btn-sm btn-light border btn-delete text-danger px-3 rounded-3 shadow-sm fw-medium">
-            <i class="fas fa-trash me-1"></i> Delete
-          </button>
-        </div>
-      </td>
-    </tr>
-  </template>
-</section>
-</div>
-
-<form id="popForm"
-      class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle"
-      style="display:none; max-width:700px;">
-
-    <!-- CABEÇALHO DO FORMULÁRIO -->
-    <div class="text-center mb-4">
-        <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
-            <i class="fas fa-users-cog text-success fs-4"></i>
-        </div>
-        <h4 class="card-title text-success fw-bold mb-0">Register Family</h4>
+            <template id="family-card-template">
+                <tr class="align-midd mb-5">
+                    <td class="py-4 ps-5">
+                        <div class="fw-bold text-dark fs-6">
+                            <i class="fas fa-users me-2 text-success"></i><span class="family-name"></span>
+                        </div>
+                        <small class="text-muted d-block mt-1">
+                            <i class="fas fa-phone me-1"></i> <span class="family-phone"></span>
+                        </small>
+                    </td>
+                    <td class="py-4">
+                        <span class="family-address fw-medium text-dark"></span>
+                        <small class="d-block text-secondary mt-1">
+                            <i class="fas fa-map me-1 text-muted"></i> <span class="family-neighborhood"></span>
+                        </small>
+                    </td>
+                    <td class="text-center py-4">
+                        <span class="family-residents fw-bold">0</span>
+                    </td>
+                    <td class="text-center py-4">
+                        <span class="family-status badge rounded-pill px-3 py-2 fw-semibold"></span>
+                    </td>
+                    <td class="text-center py-4 pe-5">
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-sm btn-light border btn-edit text-primary px-3 rounded-3 shadow-sm fw-medium">
+                                <i class="fas fa-pen me-1"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-light border btn-delete text-danger px-3 rounded-3 shadow-sm fw-medium">
+                                <i class="fas fa-trash me-1"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </template>
+        </section>
     </div>
 
-    <!-- GRID PRINCIPAL -->
-    <div class="row g-3">
-
-        <!-- Nome -->
-        <div class="col-md-8">
-            <label for="name" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-user me-1 text-success opacity-75"></i> Full Name
-            </label>
-            <input type="text"
-                   id="name"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+    <form id="popForm" class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle" style="display:none; max-width:700px;">
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
+                <i class="fas fa-users-cog text-success fs-4"></i>
+            </div>
+            <h4 class="card-title text-success fw-bold mb-0">Register Family</h4>
         </div>
 
-        <!-- Status -->
-        <div class="col-md-4">
-            <label for="status" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-toggle-on me-1 text-success opacity-75"></i> Status
-            </label>
-            <select id="status" class="form-select border-light-subtle rounded-3 py-2 shadow-sm fw-medium text-success">
-                <option value="YES" class="text-success fw-bold">🟢 YES</option>
-                <option value="NO" class="text-danger fw-bold">🔴 NO</option>
-            </select>
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label for="name" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-user me-1 text-success opacity-75"></i> Full Name
+                </label>
+                <input type="text" id="name" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="status" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-toggle-on me-1 text-success opacity-75"></i> Status
+                </label>
+                <select id="status" class="form-select border-light-subtle rounded-3 py-2 shadow-sm fw-medium text-success">
+                    <option value="YES" class="text-success fw-bold">🟢 YES</option>
+                    <option value="NO" class="text-danger fw-bold">🔴 NO</option>
+                </select>
+            </div>
+
+            <div class="col-md-8">
+                <label for="address" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-location-dot me-1 text-success opacity-75"></i> Address
+                </label>
+                <input type="text" id="address" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="neighborhood" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-map me-1 text-success opacity-75"></i> Neighborhood
+                </label>
+                <input type="text" id="neighborhood" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="phone" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-phone me-1 text-success opacity-75"></i> Phone
+                </label>
+                <input type="text" id="phone" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="men" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-male me-1 text-success opacity-75"></i> Men
+                </label>
+                <input type="number" id="men" class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success" min="0" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="women" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-female me-1 text-success opacity-75"></i> Women
+                </label>
+                <input type="number" id="women" class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success" min="0" required>
+            </div>
         </div>
 
-        <!-- Endereço -->
-        <div class="col-md-8">
-            <label for="address" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-location-dot me-1 text-success opacity-75"></i> Address
-            </label>
-            <input type="text"
-                   id="address"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+        <hr class="text-muted opacity-25 my-4">
+
+        <div class="mt-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 text-muted small text-uppercase fw-bold tracking-wider">
+                    <i class="fas fa-child me-1 text-success"></i> Child Information
+                </h5>
+                <button type="button" class="btn btn-success btn-sm px-3 rounded-3 shadow-sm fw-medium d-inline-flex align-items-center" onclick="addChild('childrenContainer')">
+                    <i class="fas fa-plus me-1"></i> Add Child
+                </button>
+            </div>
+
+            <div class="table-responsive rounded-3 border border-light-subtle shadow-sm">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-2 text-muted fw-semibold ps-3 text-start">Name</th>
+                            <th class="py-2 text-muted fw-semibold text-center" style="width:180px;">Birth Date</th>
+                            <th class="py-2 text-muted fw-semibold text-center" style="width:90px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="childrenContainer"></tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Bairro -->
-        <div class="col-md-4">
-            <label for="neighborhood" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-map me-1 text-success opacity-75"></i> Neighborhood
-            </label>
-            <input type="text"
-                   id="neighborhood"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+        <hr class="text-muted opacity-25 my-4">
+
+        <div class="row g-2">
+            <div class="col-6">
+                <button type="button" class="btn btn-outline-success fw-semibold py-2 rounded-3 w-100" id="closeForm">
+                    <i class="fas fa-times me-1"></i> Close
+                </button>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-success fw-semibold py-2 rounded-3 w-100 shadow" onclick="addFamily(event)">
+                    <i class="fas fa-save me-1"></i> Create
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form id="popFormUpdate" class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle" style="display:none; max-width:700px;">
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
+                <i class="fas fa-edit text-success fs-4"></i>
+            </div>
+            <h4 class="card-title text-success fw-bold mb-0">Edit Family</h4>
         </div>
 
-        <!-- Telefone -->
-        <div class="col-md-6">
-            <label for="phone" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-phone me-1 text-success opacity-75"></i> Phone
-            </label>
-            <input type="text"
-                   id="phone"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+        <input type="hidden" id="familyId">
+
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label for="nameUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-user me-1 text-success opacity-75"></i> Full Name
+                </label>
+                <input type="text" id="nameUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="statusUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-toggle-on me-1 text-success opacity-75"></i> Status
+                </label>
+                <select id="statusUpdate" class="form-select border-light-subtle rounded-3 py-2 shadow-sm fw-medium text-success">
+                    <option value="YES" class="text-success fw-bold">🟢 YES</option>
+                    <option value="NO" class="text-danger fw-bold">🔴 NO</option>
+                </select>
+            </div>
+
+            <div class="col-md-8">
+                <label for="addressUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-location-dot me-1 text-success opacity-75"></i> Address
+                </label>
+                <input type="text" id="addressUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="neighborhoodUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-map me-1 text-success opacity-75"></i> Neighborhood
+                </label>
+                <input type="text" id="neighborhoodUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-6">
+                <label for="phoneUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-phone me-1 text-success opacity-75"></i> Phone
+                </label>
+                <input type="text" id="phoneUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="menUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-male me-1 text-success opacity-75"></i> Men
+                </label>
+                <input type="number" id="menUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success" min="0" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="womenUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
+                    <i class="fas fa-female me-1 text-success opacity-75"></i> Women
+                </label>
+                <input type="number" id="womenUpdate" class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success" min="0" required>
+            </div>
+
+            <div hidden>
+                <label class="form-label">Children</label>
+                <input id="childrenUpdate" class="form-control" placeholder="Children">
+            </div>
         </div>
 
-        <!-- COMPOSIÇÃO MASCULINA / FEMININA -->
-        <div class="col-md-3">
-            <label for="men" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-male me-1 text-success opacity-75"></i> Men
-            </label>
-            <input type="number"
-                   id="men"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success"
-                   min="0"
-                   required>
-        </div>
+        <hr class="text-muted opacity-25 my-4">
 
-        <div class="col-md-3">
-            <label for="women" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-female me-1 text-success opacity-75"></i> Women
-            </label>
-            <input type="number"
-                   id="women"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success"
-                   min="0"
-                   required>
-        </div>
-
-    </div>
-
-    <hr class="text-muted opacity-25 my-4">
-
-    <!-- SEÇÃO DAS CRIANÇAS -->
-    <div class="mt-2">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 text-muted small text-uppercase fw-bold tracking-wider">
-                <i class="fas fa-child me-1 text-success"></i> Child Information
-            </h5>
-
-            <button type="button"
-                    class="btn btn-success btn-sm px-3 rounded-3 shadow-sm fw-medium d-inline-flex align-items-center"
-                    onclick="addChild('childrenContainer')">
-                <i class="fas fa-plus me-1"></i> Add Child
+        <div class="d-flex flex-wrap gap-2 justify-content-between">
+            <div class="d-flex gap-2 col-12 col-sm-7 p-0">
+                <button type="button" class="btn btn-outline-success fw-semibold py-2 rounded-3 flex-grow-1" id="closeFormUpdate">
+                    <i class="fas fa-times me-1"></i> Close
+                </button>
+                <button type="submit" class="btn btn-success fw-semibold py-2 rounded-3 flex-grow-1 shadow" onclick="updateFamily(event)">
+                    <i class="fas fa-save me-1"></i> Update
+                </button>
+            </div>
+            
+            <button type="button" id="updateChildren" class="btn btn-outline-primary fw-semibold py-2 rounded-3 col-12 col-sm-4 btn-edit-children">    
+                <i class="fas fa-child me-1"></i> Update Children
             </button>
         </div>
+    </form>
 
-        <div class="table-responsive rounded-3 border border-light-subtle shadow-sm">
-            <table class="table table-sm table-hover align-middle mb-0">
-                <thead class="table-light text-center">
-                    <tr>
-                        <th class="py-2 text-muted fw-semibold ps-3 text-start">Name</th>
-                        <th class="py-2 text-muted fw-semibold text-center" style="width:180px;">Birth Date</th>
-                        <th class="py-2 text-muted fw-semibold text-center" style="width:90px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="childrenContainer">
-                    <!-- As linhas serão adicionadas pelo JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <hr class="text-muted opacity-25 my-4">
-
-    <!-- BOTÕES DE AÇÃO -->
-    <div class="row g-2">
-        <div class="col-6">
-            <button type="button"
-                    class="btn btn-outline-success fw-semibold py-2 rounded-3 w-100"
-                    id="closeForm">
-                <i class="fas fa-times me-1"></i> Close
-            </button>
-        </div>
-        <div class="col-6">
-            <button type="submit"
-                    class="btn btn-success fw-semibold py-2 rounded-3 w-100 shadow"
-                    onclick="addFamily(event)">
-                <i class="fas fa-save me-1"></i> Create
-            </button>
-        </div>
-    </div>
-
-</form>
-
-<form id="popFormUpdate"
-      class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle"
-      style="display:none; max-width:700px;">
-
-    <!-- CABEÇALHO DO FORMULÁRIO -->
-    <div class="text-center mb-4">
-        <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
-            <i class="fas fa-edit text-success fs-4"></i>
-        </div>
-        <h4 class="card-title text-success fw-bold mb-0">Edit Family</h4>
-    </div>
-
-    <input type="hidden" id="familyId">
-
-    <!-- GRID PRINCIPAL -->
-    <div class="row g-3">
-
-        <!-- Nome -->
-        <div class="col-md-8">
-            <label for="nameUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-user me-1 text-success opacity-75"></i> Full Name
-            </label>
-            <input type="text"
-                   id="nameUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+    <form id="popFormUpdateChildren" class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle" style="display:none; max-width:600px;">
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
+                <i class="fas fa-child text-primary fs-4"></i>
+            </div>
+            <h4 class="card-title text-primary fw-bold mb-0">Edit Children</h4>
         </div>
 
-        <!-- Status -->
-        <div class="col-md-4">
-            <label for="statusUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-toggle-on me-1 text-success opacity-75"></i> Status
-            </label>
-            <select id="statusUpdate" class="form-select border-light-subtle rounded-3 py-2 shadow-sm fw-medium text-success">
-                <option value="YES" class="text-success fw-bold">🟢 YES</option>
-                <option value="NO" class="text-danger fw-bold">🔴 NO</option>
-            </select>
+        <input type="hidden" id="familyIdChildrenUpdate">
+
+        <div class="mt-2">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0 text-muted small text-uppercase fw-bold tracking-wider">
+                    <i class="fas fa-users-items me-1 text-primary"></i> Children List
+                </h5>
+                <button type="button" class="btn btn-success btn-sm px-3 rounded-3 shadow-sm fw-medium d-inline-flex align-items-center" onclick="addChild('childrenContainerUpdate')">
+                    <i class="fas fa-plus me-1"></i> Add Child
+                </button>
+            </div>
+
+            <div class="table-responsive rounded-3 border border-light-subtle shadow-sm">
+                <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light text-center">
+                        <tr>
+                            <th class="py-2 text-muted fw-semibold ps-3 text-start">Name</th>
+                            <th class="py-2 text-muted fw-semibold text-center" style="width:180px;">Birth Date</th>
+                            <th class="py-2 text-muted fw-semibold text-center" style="width:90px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="childrenContainerUpdate"></tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- Endereço -->
-        <div class="col-md-8">
-            <label for="addressUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-location-dot me-1 text-success opacity-75"></i> Address
-            </label>
-            <input type="text"
-                   id="addressUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
+        <hr class="text-muted opacity-25 my-4">
+
+        <div class="row g-2">
+            <div class="col-6">
+                <button type="button" class="btn btn-outline-secondary fw-semibold py-2 rounded-3 w-100" id="closeFormUpdateChildren">
+                    <i class="fas fa-times me-1"></i> Close
+                </button>
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn btn-primary fw-semibold py-2 rounded-3 w-100 shadow" onclick="updateChildrenAll(event)">
+                    <i class="fas fa-save me-1"></i> Update
+                </button>
+            </div>
         </div>
+    </form>
 
-        <!-- Bairro -->
-        <div class="col-md-4">
-            <label for="neighborhoodUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-map me-1 text-success opacity-75"></i> Neighborhood
-            </label>
-            <input type="text"
-                   id="neighborhoodUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
-        </div>
-
-        <!-- Telefone -->
-        <div class="col-md-6">
-            <label for="phoneUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-phone me-1 text-success opacity-75"></i> Phone
-            </label>
-            <input type="text"
-                   id="phoneUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm"
-                   required>
-        </div>
-
-        <!-- Homens -->
-        <div class="col-md-3">
-            <label for="menUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-male me-1 text-success opacity-75"></i> Men
-            </label>
-            <input type="number"
-                   id="menUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success"
-                   min="0"
-                   required>
-        </div>
-
-        <!-- Mulheres -->
-        <div class="col-md-3">
-            <label for="womenUpdate" class="form-label text-muted small text-uppercase fw-semibold tracking-wider mb-1">
-                <i class="fas fa-female me-1 text-success opacity-75"></i> Women
-            </label>
-            <input type="number"
-                   id="womenUpdate"
-                   class="form-control border-light-subtle rounded-3 py-2 shadow-sm text-center fw-semibold text-success"
-                   min="0"
-                   required>
-        </div>
-
-        <!-- Input Oculto (Mantido intacto) -->
-        <div hidden>
-            <label class="form-label">Children</label>
-            <input id="childrenUpdate" class="form-control" placeholder="Children">
-        </div>
-
-    </div>
-
-    <hr class="text-muted opacity-25 my-4">
-
-    <!-- BOTÕES DE AÇÃO -->
-    <div class="d-flex flex-wrap gap-2 justify-content-between">
-        <div class="d-flex gap-2 col-12 col-sm-7 p-0">
-            <button type="button"
-                    class="btn btn-outline-success fw-semibold py-2 rounded-3 flex-grow-1"
-                    id="closeFormUpdate">
-                <i class="fas fa-times me-1"></i> Close
-            </button>
-            <button type="submit"
-                    class="btn btn-success fw-semibold py-2 rounded-3 flex-grow-1 shadow"
-                    onclick="updateFamily(event)">
-                <i class="fas fa-save me-1"></i> Update
-            </button>
-        </div>
-        
-        <button type="button" id="updateChildren" 
-                class="btn btn-outline-primary fw-semibold py-2 rounded-3 col-12 col-sm-4 btn-edit-children">    
-            <i class="fas fa-child me-1"></i> Update Children
-        </button>
-    </div>
-
-</form>
-<form id="popFormUpdateChildren"
-      class="form-popup container bg-white p-4 rounded-4 shadow-lg border border-light-subtle"
-      style="display:none; max-width:600px;">
-
-    <!-- CABEÇALHO DO FORMULÁRIO -->
-    <div class="text-center mb-4">
-        <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-2" style="width:56px;height:56px;">
-            <i class="fas fa-child text-primary fs-4"></i>
-        </div>
-        <h4 class="card-title text-primary fw-bold mb-0">Edit Children</h4>
-    </div>
-
-    <input type="hidden" id="familyIdChildrenUpdate">
-
-    <!-- SEÇÃO DA TABELA -->
-    <div class="mt-2">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0 text-muted small text-uppercase fw-bold tracking-wider">
-                <i class="fas fa-users-items me-1 text-primary"></i> Children List
-            </h5>
-
-            <button type="button"
-                    class="btn btn-success btn-sm px-3 rounded-3 shadow-sm fw-medium d-inline-flex align-items-center"
-                    onclick="addChild('childrenContainerUpdate')">
-                <i class="fas fa-plus me-1"></i> Add Child
-            </button>
-        </div>
-
-        <div class="table-responsive rounded-3 border border-light-subtle shadow-sm">
-            <table class="table table-sm table-hover align-middle mb-0">
-                <thead class="table-light text-center">
-                    <tr>
-                        <th class="py-2 text-muted fw-semibold ps-3 text-start">Name</th>
-                        <th class="py-2 text-muted fw-semibold text-center" style="width:180px;">Birth Date</th>
-                        <th class="py-2 text-muted fw-semibold text-center" style="width:90px;">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="childrenContainerUpdate">
-                    <!-- As linhas serão adicionadas pelo JavaScript -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <hr class="text-muted opacity-25 my-4">
-
-    <!-- BOTÕES DE AÇÃO -->
-    <div class="row g-2">
-        <div class="col-6">
-            <button type="button"
-                    class="btn btn-outline-secondary fw-semibold py-2 rounded-3 w-100"
-                    id="closeFormUpdateChildren">
-                <i class="fas fa-times me-1"></i> Close
-            </button>
-        </div>
-        <div class="col-6">
-            <button type="button"
-                    class="btn btn-primary fw-semibold py-2 rounded-3 w-100 shadow"
-                    onclick="updateChildrenAll(event)">
-                <i class="fas fa-save me-1"></i> Update
-            </button>
-        </div>
-    </div>
-
-</form>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
