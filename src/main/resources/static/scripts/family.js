@@ -1,98 +1,77 @@
-document.getElementById('addNewFamily').addEventListener('click', displayForm);
-document.getElementById('closeForm').addEventListener('click', closeForm);
-document.getElementById('closeFormUpdate').addEventListener('click', closeFormUpdate);
-document.getElementById('closeFormUpdateChildren').addEventListener('click', closeFormUpdateChildren);
-
 const search = document.querySelector('#searchFamily');
 if (search) {
-
-    // This function...
     search.addEventListener('input', () => {
         const value = search.value.toLowerCase();
         const allFamilies = document.querySelector('#showAllFamilies');
             
         if (allFamilies) {
-        const families = allFamilies.querySelectorAll('tr');
-        families.forEach(family => {
-            const info = family.querySelector('.family-name');
-            if (info) {
-                const familyName = info.textContent.toLowerCase();
-                family.style.display = familyName.includes(value) ? '' : 'none';
-            }
-        });
-    }
+            const families = allFamilies.querySelectorAll('tr');
+            families.forEach(family => {
+                const info = family.querySelector('.family-name');
+                if (info) {
+                    const familyName = info.textContent.toLowerCase();
+                    family.style.display = familyName.includes(value) ? '' : 'none';
+                }
+            });
+        }
     });
 }
 
 const editBtn = document.querySelector('.btn-edit-children');
 if (editBtn) {
-
-    // This function...
     editBtn.addEventListener('click', () => {         
         const familyIdInput = document.getElementById('familyId');
-            if (familyIdInput && familyIdInput.value) {
-                updateChildren(familyIdInput.value);
+        if (familyIdInput && familyIdInput.value) {
+            updateChildren(familyIdInput.value);
         }
     });
 }
 
 function displayForm(event) {
-
-    // This function...
     closeFormUpdate(event);
     const form = document.getElementById('popForm');
     form.style.display = 'block';
 }
 
 function closeForm(event) {
-
-    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('popForm');
     form.scrollTop = 0;
     form.style.display = 'none';
     const container = document.getElementById('childrenContainer');
-    container.innerHTML = '';
+    if (container) container.innerHTML = '';
 }
 
 function displayFormUpdate() {
-    
-    // This function...
     closeForm();
     const form = document.getElementById('popFormUpdate');
     form.style.display = 'block';
 }
 
 function closeFormUpdate(event) {
-
-    // This function...
     if (event) event.preventDefault();
     const form = document.getElementById('popFormUpdate');
     form.scrollTop = 0;
     form.style.display = 'none';
 }
 
-function displayFormUpdateChildren() {
+async function displayFormUpdateChildren() {
 
-    // This function...
     const form = document.getElementById('popFormUpdateChildren');
+    const familyId = Number(document.getElementById('familyId').value);
     form.style.display = 'block';
+    await updateChildren(familyId);
 }
 
-function closeFormUpdateChildren(event) {
-
-    // This function...
-    if (event) event.preventDefault();
+function closeFormUpdateChild(event) {
     const form = document.getElementById('popFormUpdateChildren');
     form.scrollTop = 0;
     form.style.display = 'none';
     const container = document.getElementById("childrenContainerUpdate");
-    container.innerHTML = "";
+    if (container) container.innerHTML = "";
 }
 
 async function showAllFamilies() {
-
-    // This function...
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
     let numberActiveFamilies = document.getElementById('totalActiveFamilies');
@@ -138,8 +117,6 @@ async function showAllFamilies() {
 }
 
 function createFamilyCard(family) {
-
-    // This function...
     const template = document.getElementById('family-card-template');
     const clone = template.content.cloneNode(true);
 
@@ -166,8 +143,6 @@ function createFamilyCard(family) {
 }
 
 function addFamily(event) {
-
-    // This function...
     event.preventDefault();
     const children = [];
     document.querySelectorAll('.child-item').forEach(child => {
@@ -208,8 +183,9 @@ function addFamily(event) {
     .then(response => {
         if (response.ok) {
             alert('Family created successfully!');
-            document.getElementById('popForm').reset();
-            orderFamilies();
+            document.getElementById('popForm').reset();          
+            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
+            showAllFamilies();
             closeForm();
         } else {
             alert('Failed to create family.');
@@ -222,8 +198,6 @@ function addFamily(event) {
 }
 
 async function editFamilyLoad(id) {
-
-    // This function...
     displayFormUpdate();
     
     await fetch(`http://localhost:8080/get_family/${id}`)
@@ -246,8 +220,6 @@ async function editFamilyLoad(id) {
 }
 
 function updateFamily(event) {
-
-    // This function...
     event.preventDefault();
 
     const family = {
@@ -279,7 +251,8 @@ function updateFamily(event) {
     })
     .then(response => {
         if (response.ok) {
-            alert("Family updated successfully!");
+            alert("Family updated successfully!");           
+            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             showAllFamilies();
             closeFormUpdate();
         } else {
@@ -293,8 +266,6 @@ function updateFamily(event) {
 }
 
 function deleteFamily(id) {
-
-    // This function...
     if (!confirm("Are you sure you want to delete this family?")) {
         return;
     }
@@ -305,6 +276,8 @@ function deleteFamily(id) {
     .then(response => {
         if (response.ok) {
             alert("Family deleted successfully.");
+            
+            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             showAllFamilies();
         } else {
             alert("Failed to delete family.");
@@ -314,8 +287,6 @@ function deleteFamily(id) {
 }
 
 function addChild(item) {
-
-    // This function...
     const container = document.getElementById(item);
     if (!container) return;
 
@@ -348,17 +319,13 @@ function addChild(item) {
             </button>
         </td>
     `;
-    
     container.appendChild(row);
 }
 
 async function updateChildren(id) {
     
-    // This function...
-    displayFormUpdateChildren();
     const container = document.getElementById("childrenContainerUpdate");
     container.innerHTML = ""; 
-    
     document.getElementById('familyIdChildrenUpdate').value = id;
     const response = await fetch(`http://localhost:8080/get_children_by_family/${id}`, {
         method: 'GET',
@@ -392,8 +359,7 @@ async function updateChildren(id) {
 }
 
 function updateChildrenAll(event) {
-
-    // This function...
+    
     event.preventDefault();
     const id = document.getElementById("familyIdChildrenUpdate").value;
     
@@ -431,8 +397,9 @@ function updateChildrenAll(event) {
     })
     .then(response => {
         if (response.ok) {
-            alert("Family updated successfully!");
-            closeFormUpdateChildren();
+            alert("Children updated successfully!");
+            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
+            closeFormUpdateChild();
         } else {
             alert("Failed to update children.");
         }
@@ -442,5 +409,3 @@ function updateChildrenAll(event) {
         alert("Error updating children.");
     });
 }
-
-showAllFamilies();

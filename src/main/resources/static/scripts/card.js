@@ -56,5 +56,3 @@ function hideAndPrint() {
         panel.style.display = '';
     }, 500);
 }
-
-generateCards();

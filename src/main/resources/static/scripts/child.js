@@ -88,5 +88,3 @@ function calculateAge(birthDateString) {
 
     return age;
 }
-
-showAllChildren();

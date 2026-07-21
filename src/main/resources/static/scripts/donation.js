@@ -1,19 +1,12 @@
-const btnCloseFormUpdate = document.getElementById('closeFormUpdate');
-    if (btnCloseFormUpdate) btnCloseFormUpdate.addEventListener('click', closeForm);
+async function displayInfo() {
 
-function displayForm(event) {
-
-    // This function...
     const form = document.getElementById('showFamily');
-    form.style.display = 'block';
+    if (form) form.style.display = 'block';
 }
 
-function closeForm(event) {
-
-    // This function...
+function closeInfo(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
-    form.scrollTop = 0;
     form.style.display = 'none';
 }
 
@@ -90,7 +83,7 @@ async function showFamilyStatus() {
         number.textContent = count;
         familyId.id = `${family.familyId}`;
         const familyIdShow = `${family.familyId}`;
-        show.addEventListener("click", () => {showFamilyInfo(family.familyId)})
+        show.addEventListener("click", () => { showFamilyInfo(family.familyId); })
         nameCell.textContent = family.familyName;
         deliveryCell.textContent = family.delivery ?? "N/A";
         select.id = `family-select-${family.familyId}`;
@@ -139,7 +132,6 @@ function updateFamilyStatus(familyId) {
 async function showFamilyInfo(familyId) {
 
     // This function...
-    displayForm();
     const resultContainer = document.getElementById('showFamily');
     resultContainer.innerHTML = '';
 
@@ -170,7 +162,8 @@ async function showFamilyInfo(familyId) {
         populateTable(clone, data.donationList);
 
         resultContainer.appendChild(clone);
-
+        displayInfo()
+        
     } catch (error) {
         console.error(error);
         alert("Error loading donations.");
@@ -221,6 +214,3 @@ function formatDeliveryDate(delivery) {
 
     return `${day}/${month}/${year}`;
 }
-
-showFamilyStatus();
-updateCurrentDateLabel();
