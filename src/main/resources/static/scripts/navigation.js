@@ -1,11 +1,10 @@
-function getCurrentDate() {
+function currentMonth() {
 
-    // This function returns the current date.
+    // This function returns the current month.
     const today = new Date();
-    const day = String(today.getDate()).padStart(2, "0");
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const year = today.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `01/${month}/${year}`;
 }
 
 const appState = {
@@ -22,7 +21,7 @@ const pages = {
     card: './templates/card.html'
 };
 
-async function navigateTo(pageKey, month = getCurrentDate()) {
+async function navigateTo(pageKey, month = currentMonth()) {
     const viewport = document.getElementById('content-viewport');
     
     if (!pages[pageKey]) {

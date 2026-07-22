@@ -1,32 +1,3 @@
-const search = document.querySelector('#searchFamily');
-if (search) {
-    search.addEventListener('input', () => {
-        const value = search.value.toLowerCase();
-        const allFamilies = document.querySelector('#showAllFamilies');
-            
-        if (allFamilies) {
-            const families = allFamilies.querySelectorAll('tr');
-            families.forEach(family => {
-                const info = family.querySelector('.family-name');
-                if (info) {
-                    const familyName = info.textContent.toLowerCase();
-                    family.style.display = familyName.includes(value) ? '' : 'none';
-                }
-            });
-        }
-    });
-}
-
-const editBtn = document.querySelector('.btn-edit-children');
-if (editBtn) {
-    editBtn.addEventListener('click', () => {         
-        const familyIdInput = document.getElementById('familyId');
-        if (familyIdInput && familyIdInput.value) {
-            updateChildren(familyIdInput.value);
-        }
-    });
-}
-
 function displayForm(event) {
     closeFormUpdate(event);
     const form = document.getElementById('popForm');
@@ -64,6 +35,8 @@ async function displayFormUpdateChildren() {
 }
 
 function closeFormUpdateChild(event) {
+
+    closeFormUpdate();
     const form = document.getElementById('popFormUpdateChildren');
     form.scrollTop = 0;
     form.style.display = 'none';
@@ -109,6 +82,8 @@ async function showAllFamilies() {
         
         if (numberActiveFamilies) numberActiveFamilies.innerHTML = count;
         if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = data.length - count;
+
+        setupFamilySearch();
 
     } catch (error) {
         console.error('Error fetching families:', error);
@@ -400,6 +375,7 @@ function updateChildrenAll(event) {
             alert("Children updated successfully!");
             if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             closeFormUpdateChild();
+            closeFormUpdate();
         } else {
             alert("Failed to update children.");
         }
@@ -407,5 +383,26 @@ function updateChildrenAll(event) {
     .catch(error => {
         console.error(error);
         alert("Error updating children.");
+    });
+}
+
+function setupFamilySearch() {
+    
+    const search = document.querySelector('#searchFamily');
+    const allFamilies = document.querySelector('#showAllFamilies');
+
+    if (!search || !allFamilies) return;
+
+    search.addEventListener('input', () => {
+        const value = search.value.toLowerCase();  
+        const families = allFamilies.querySelectorAll('.family-data');
+
+        families.forEach(family => {
+            const info = family.querySelector('.family-name');
+            if (info) {
+                const familyName = info.textContent.toLowerCase();
+                family.style.display = familyName.includes(value) ? '' : 'none';
+            }
+        });
     });
 }

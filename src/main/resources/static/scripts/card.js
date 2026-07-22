@@ -1,12 +1,3 @@
-function currentMonth() {
-
-    // This function...
-    const today = new Date();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-    return `01/${month}/${year}`;
-}
-
 async function generateCards() {
 
     // This function
@@ -55,4 +46,5 @@ function hideAndPrint() {
     setTimeout(() => {
         panel.style.display = '';
     }, 500);
+    
 }

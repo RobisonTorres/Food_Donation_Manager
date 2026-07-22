@@ -1,4 +1,4 @@
-async function displayInfo() {
+function displayInfo() {
 
     const form = document.getElementById('showFamily');
     if (form) form.style.display = 'block';
@@ -8,15 +8,6 @@ function closeInfo(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
     form.style.display = 'none';
-}
-
-function currentMonth() {
-
-    // This function returns the current month.
-    const today = new Date();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-    return `01/${month}/${year}`;
 }
 
 function getCurrentDate() {
