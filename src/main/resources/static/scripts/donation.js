@@ -5,6 +5,7 @@ function displayInfo() {
 }
 
 function closeInfo(event) {
+    
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
     form.style.display = 'none';
@@ -32,61 +33,63 @@ function updateCurrentDateLabel() {
 
 async function showFamilyStatus() {
 
-    // This function show all families with its current status of donation.
-    const month = currentMonth();
-    //const month = "01/08/2026"
-    const response = await fetch(
-      `http://localhost:8080/get_all_families_active_by_month?month=${month}`,
-        {
-            method: "GET",
-            headers: {
+    // This function shows all active families and their donation status.
+    try {
+        const month = currentMonth();
+
+        const response = await fetch(
+            `http://localhost:8080/get_all_families_active_by_month?month=${month}`,
+            {
+                method: "GET",
+                headers: {
                     "Content-Type": "application/json"
+                }
             }
-        }
-  );
-    const data = await response.json();
-    const tableBody = document.getElementById("familyTableNewBody");
-    const template = document.getElementById("familyRowTemplate");
-    tableBody.innerHTML = "";
+        );
 
-    let totalFamilies = data.length;
-    let totalDelivered = 0;
-    let totalPending = 0;
-    let count = 1;
+        const families = await response.json();
 
-    data.forEach(family => {
-        const clone = template.content.cloneNode(true);
-        const familyId = clone.querySelector(".family-id");
-        const nameCell = clone.querySelector(".family-name");
-        const deliveryCell = clone.querySelector(".family-delivery");
-        const select = clone.querySelector(".family-select");
-        const number = clone.querySelector(".family-number");
-        const show = clone.querySelector(".family-info");
+        const tableBody = document.getElementById("familyTableNewBody");
+        const template = document.getElementById("familyRowTemplate");
 
-        const currentStatus = family.status ?? "PENDENT";
+        tableBody.innerHTML = "";
 
-        if (currentStatus === "OK") {
-        totalDelivered++;
-        } else {
-        totalPending++;
-        }
+        let totalDelivered = 0;
 
-        number.textContent = count;
-        familyId.id = `${family.familyId}`;
-        const familyIdShow = `${family.familyId}`;
-        show.addEventListener("click", () => { showFamilyInfo(family.familyId); })
-        nameCell.textContent = family.familyName;
-        deliveryCell.textContent = family.delivery ?? "N/A";
-        select.id = `family-select-${family.familyId}`;
-        select.value = currentStatus;
-        select.addEventListener("change", () => { updateFamilyStatus(Number(familyIdShow)); });
-        tableBody.appendChild(clone);
-        count += 1;
-    });
+        families.forEach((family, index) => {
 
-    document.getElementById("totalFamilies").textContent = totalFamilies;
-    document.getElementById("totalDelivered").textContent = totalDelivered;
-    document.getElementById("totalPending").textContent = totalPending;
+            const clone = template.content.cloneNode(true);
+
+            const id = family.familyId;
+            const status = family.status ?? "PENDENT";
+
+            if (status === "OK") {
+                totalDelivered++;
+            }
+
+            clone.querySelector(".family-number").textContent = index + 1;
+            clone.querySelector(".family-id").id = id;
+            clone.querySelector(".family-name").textContent = family.familyName;
+            clone.querySelector(".family-delivery").textContent = family.delivery ?? "N/A";
+
+            const select = clone.querySelector(".family-select");
+            select.id = `family-select-${id}`;
+            select.value = status;
+            select.addEventListener("change", () => updateFamilyStatus(id));
+
+            clone.querySelector(".family-info")
+                .addEventListener("click", () => showFamilyInfo(id));
+
+            tableBody.appendChild(clone);
+        });
+
+        document.getElementById("totalFamilies").textContent = families.length;
+        document.getElementById("totalDelivered").textContent = totalDelivered;
+        document.getElementById("totalPending").textContent = families.length - totalDelivered;
+
+    } catch (error) {
+        console.error("Error loading family status:", error);
+    }
 }
 
 function updateFamilyStatus(familyId) {
