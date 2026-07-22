@@ -208,3 +208,21 @@ function formatDeliveryDate(delivery) {
 
     return `${day}/${month}/${year}`;
 }
+
+button.addEventListener("click", () => {
+    menu.classList.toggle("show");
+});
+
+options.forEach(option => {
+    option.addEventListener("click", () => {
+
+        button.querySelector("span").textContent =
+            option.textContent;
+
+        dropdown.dataset.value = option.dataset.value;
+
+        menu.classList.remove("show");
+
+        updateFamilyStatus(id);
+    });
+});

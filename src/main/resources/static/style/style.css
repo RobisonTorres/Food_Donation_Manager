@@ -5,7 +5,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1050;
-    background-color: #ffffff;
+    background-color: #bcc8dbd7;
     padding: 2.5rem 2rem;
     border-radius: 1.2rem;
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
@@ -50,6 +50,21 @@
     text-align: center;
     min-height: 140px;
     margin: 0;                           
+}
+
+.table {
+    --bs-table-bg: #f5f6f8;
+    font-size: 1.25rem;
+}
+
+.table > thead.table-light {
+    --bs-table-bg: #eef0f2;
+    --bs-table-accent-bg: #eef0f2;
+    font-size: 1.0rem;
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: #e9ecef;
 }
 
 @media print {

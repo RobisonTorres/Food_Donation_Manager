@@ -118,6 +118,7 @@ function createFamilyCard(family) {
 }
 
 function addFamily(event) {
+
     event.preventDefault();
     const children = [];
     document.querySelectorAll('.child-item').forEach(child => {
@@ -159,7 +160,6 @@ function addFamily(event) {
         if (response.ok) {
             alert('Family created successfully!');
             document.getElementById('popForm').reset();          
-            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             showAllFamilies();
             closeForm();
         } else {
@@ -227,7 +227,6 @@ function updateFamily(event) {
     .then(response => {
         if (response.ok) {
             alert("Family updated successfully!");           
-            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             showAllFamilies();
             closeFormUpdate();
         } else {
@@ -252,7 +251,6 @@ function deleteFamily(id) {
         if (response.ok) {
             alert("Family deleted successfully.");
             
-            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             showAllFamilies();
         } else {
             alert("Failed to delete family.");
@@ -373,7 +371,6 @@ function updateChildrenAll(event) {
     .then(response => {
         if (response.ok) {
             alert("Children updated successfully!");
-            if (typeof onFamilyDataChanged === 'function') onFamilyDataChanged();
             closeFormUpdateChild();
             closeFormUpdate();
         } else {
