@@ -30,7 +30,9 @@ public class Family {
     @JsonIgnore
     private List<Child> childList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "family")
+    @OneToMany(mappedBy = "family",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnore
     private List<Donation> donationList = new ArrayList<>();
 

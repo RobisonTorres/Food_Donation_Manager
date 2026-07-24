@@ -31,6 +31,7 @@ public class ControllersFamily {
 
     @GetMapping("get_families")
     public List<Family> getAllFamilies() {
+        System.out.println("Calling Api - Families");
         return servicesFamily.getAllFamilies();
     }
 
@@ -48,6 +49,7 @@ public class ControllersFamily {
     @GetMapping("/get_all_families_active_by_month")
     public List<FamilyDonationDto> getAllFamiliesStatusActiveMonth(
                                     @RequestParam LocalDate month) {
+        System.out.println("Calling Api - Status");
         return servicesFamily.getAllFamiliesActiveStatusAndMonth(month);
     }
 
@@ -58,6 +60,7 @@ public class ControllersFamily {
 
     @GetMapping("/get_children_family")
     public List<FamilyChildDto> getAllChildrenByFamily() {
+        System.out.println("Calling Api - Children");
         return servicesFamily.getFamiliesWithChildren();
     }
 

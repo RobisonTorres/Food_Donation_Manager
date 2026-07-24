@@ -1,14 +1,16 @@
 function displayForm(event) {
     closeFormUpdate(event);
     const form = document.getElementById('popForm');
-    form.style.display = 'block';
+    if (form) form.style.display = 'block';
 }
 
 function closeForm(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('popForm');
-    form.scrollTop = 0;
-    form.style.display = 'none';
+    if (form) {
+        form.scrollTop = 0;
+        form.style.display = 'none';
+    }
     const container = document.getElementById('childrenContainer');
     if (container) container.innerHTML = '';
 }
@@ -16,35 +18,37 @@ function closeForm(event) {
 function displayFormUpdate() {
     closeForm();
     const form = document.getElementById('popFormUpdate');
-    form.style.display = 'block';
+    if (form) form.style.display = 'block';
 }
 
 function closeFormUpdate(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('popFormUpdate');
-    form.scrollTop = 0;
-    form.style.display = 'none';
+    if (form) {
+        form.scrollTop = 0;
+        form.style.display = 'none';
+    }
 }
 
 async function displayFormUpdateChildren() {
-
     const form = document.getElementById('popFormUpdateChildren');
     const familyId = Number(document.getElementById('familyId').value);
-    form.style.display = 'block';
+    if (form) form.style.display = 'block';
     await updateChildren(familyId);
 }
 
 function closeFormUpdateChild(event) {
-
     closeFormUpdate();
     const form = document.getElementById('popFormUpdateChildren');
-    form.scrollTop = 0;
-    form.style.display = 'none';
+    if (form) {
+        form.scrollTop = 0;
+        form.style.display = 'none';
+    }
     const container = document.getElementById("childrenContainerUpdate");
     if (container) container.innerHTML = "";
 }
 
-async function showAllFamilies() {
+async function showAllFamilies(data) {
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
     let numberActiveFamilies = document.getElementById('totalActiveFamilies');
@@ -53,42 +57,27 @@ async function showAllFamilies() {
     if (!container) return;
     container.innerHTML = '';
 
-    try {
-        const response = await fetch('http://localhost:8080/get_families', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
+    if (numberFamily) numberFamily.innerHTML = data.length;
+    let count = 0;
 
-        if (!response.ok) throw new Error('Network response was not ok');
+    data.sort((a, b) => {
+        if (a.status !== b.status) {
+            return a.status === "YES" ? -1 : 1;
+        }
+        return a.name.localeCompare(b.name);
+    });
 
-        const data = await response.json();
-        
-        if (numberFamily) numberFamily.innerHTML = data.length;
-        let count = 0;
-        
-        data.sort((a, b) => {
-            if (a.status !== b.status) {
-                return a.status === "YES" ? -1 : 1;
-            }
-            return a.name.localeCompare(b.name);
-        });
+    data.forEach(family => {
+        container.appendChild(createFamilyCard(family));
+        if (family.status === "YES") {
+            count += 1;
+        }
+    });
 
-        data.forEach(family => {
-            container.appendChild(createFamilyCard(family));
-            if (family.status === "YES"){
-                count += 1;
-            }
-        });
-        
-        if (numberActiveFamilies) numberActiveFamilies.innerHTML = count;
-        if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = data.length - count;
+    if (numberActiveFamilies) numberActiveFamilies.innerHTML = count;
+    if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = data.length - count;
 
-        setupFamilySearch();
-
-    } catch (error) {
-        console.error('Error fetching families:', error);
-        container.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4 fw-medium">Error loading families.</td></tr>';
-    }
+    setupFamilySearch();
 }
 
 function createFamilyCard(family) {
@@ -99,7 +88,7 @@ function createFamilyCard(family) {
     clone.querySelector('.family-address').textContent = family.address;
     clone.querySelector('.family-neighborhood').textContent = family.neighborhood;
     clone.querySelector('.family-phone').textContent = family.phone;
-    
+
     family.residents = (Number(family.men) || 0) + (Number(family.women) || 0) + (Number(family.children) || 0);
     clone.querySelector('.family-residents').textContent = family.residents;
 
@@ -118,7 +107,6 @@ function createFamilyCard(family) {
 }
 
 function addFamily(event) {
-
     event.preventDefault();
     const children = [];
     document.querySelectorAll('.child-item').forEach(child => {
@@ -140,18 +128,18 @@ function addFamily(event) {
         children: children.length,
         status: document.getElementById('status').value.trim(),
     };
-        
+
     if (!family.name || !family.address || !family.neighborhood || !family.phone) {
         alert("Please fill in all required fields.");
         return;
     }
-    
+
     const familyChildWrapperDto = {
         familyDto: family,
         childrenDto: children
     };
 
-    fetch('http://localhost:8080/create_family', {
+    fetch(`${API_BASE}/create_family`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(familyChildWrapperDto)
@@ -159,8 +147,8 @@ function addFamily(event) {
     .then(response => {
         if (response.ok) {
             alert('Family created successfully!');
-            document.getElementById('popForm').reset();          
-            showAllFamilies();
+            document.getElementById('popForm').reset();
+            onFamilyDataChanged();
             closeForm();
         } else {
             alert('Failed to create family.');
@@ -174,8 +162,8 @@ function addFamily(event) {
 
 async function editFamilyLoad(id) {
     displayFormUpdate();
-    
-    await fetch(`http://localhost:8080/get_family/${id}`)
+
+    await fetch(`${API_BASE}/get_family/${id}`)
         .then(response => response.json())
         .then(family => {
             document.getElementById('familyId').value = family.id;
@@ -219,15 +207,15 @@ function updateFamily(event) {
         childrenDto: []
     };
 
-    fetch(`http://localhost:8080/update_family/${family.id}`, {
+    fetch(`${API_BASE}/update_family/${family.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(familyChildWrapperDto)
     })
     .then(response => {
         if (response.ok) {
-            alert("Family updated successfully!");           
-            showAllFamilies();
+            alert("Family updated successfully!");
+            onFamilyDataChanged();
             closeFormUpdate();
         } else {
             alert("Failed to update family.");
@@ -244,14 +232,13 @@ function deleteFamily(id) {
         return;
     }
 
-    fetch(`http://localhost:8080/delete_family/${id}`, {
+    fetch(`${API_BASE}/delete_family/${id}`, {
         method: 'DELETE'
     })
     .then(response => {
         if (response.ok) {
             alert("Family deleted successfully.");
-            
-            showAllFamilies();
+            onFamilyDataChanged();
         } else {
             alert("Failed to delete family.");
         }
@@ -263,7 +250,7 @@ function addChild(item) {
     const container = document.getElementById(item);
     if (!container) return;
 
-    const row = document.createElement("tr");  
+    const row = document.createElement("tr");
     let rowClass = "child-item";
     let nameClass = "child-name";
     let birthClass = "child-birth";
@@ -296,17 +283,17 @@ function addChild(item) {
 }
 
 async function updateChildren(id) {
-    
     const container = document.getElementById("childrenContainerUpdate");
-    container.innerHTML = ""; 
+    container.innerHTML = "";
     document.getElementById('familyIdChildrenUpdate').value = id;
-    const response = await fetch(`http://localhost:8080/get_children_by_family/${id}`, {
+
+    const response = await fetch(`${API_BASE}/get_children_by_family/${id}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
-    
+
     const data = await response.json();
-    
+
     data.forEach(child => {
         const row = document.createElement("tr");
         row.className = "child-update-item";
@@ -332,10 +319,9 @@ async function updateChildren(id) {
 }
 
 function updateChildrenAll(event) {
-    
     event.preventDefault();
     const id = document.getElementById("familyIdChildrenUpdate").value;
-    
+
     const childrenUpdate = [];
     document.querySelectorAll('.child-update-item').forEach(child => {
         const name = child.querySelector('.child-name-update').value.trim();
@@ -363,7 +349,7 @@ function updateChildrenAll(event) {
         childrenDto: childrenUpdate
     };
 
-    fetch(`http://localhost:8080/update_children_by_family_id/${id}`, {
+    fetch(`${API_BASE}/update_children_by_family_id/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(familyChildWrapperDto)
@@ -373,6 +359,7 @@ function updateChildrenAll(event) {
             alert("Children updated successfully!");
             closeFormUpdateChild();
             closeFormUpdate();
+            onFamilyDataChanged();
         } else {
             alert("Failed to update children.");
         }
@@ -384,14 +371,14 @@ function updateChildrenAll(event) {
 }
 
 function setupFamilySearch() {
-    
+ 
     const search = document.querySelector('#searchFamily');
     const allFamilies = document.querySelector('#showAllFamilies');
 
     if (!search || !allFamilies) return;
 
     search.addEventListener('input', () => {
-        const value = search.value.toLowerCase();  
+        const value = search.value.toLowerCase();
         const families = allFamilies.querySelectorAll('.family-data');
 
         families.forEach(family => {

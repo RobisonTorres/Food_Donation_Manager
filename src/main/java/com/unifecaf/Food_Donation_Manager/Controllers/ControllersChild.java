@@ -41,8 +41,6 @@ public class ControllersChild {
         family.setChildren(children == null ? 0 : children.size());
         servicesFamily.saveFamily(family);
 
-        Family family2 = servicesFamily.getFamilyById(id);
-
         if (wrapperDto.getChildrenDto() != null) {
             for (ChildDto childDto : wrapperDto.getChildrenDto()) {
                 Child child = modelMapper.map(childDto, Child.class);

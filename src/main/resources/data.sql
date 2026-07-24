@@ -1,3 +1,4 @@
+/*
 INSERT INTO families (name, address, neighborhood, phone, men, women, children, status) VALUES
 ('Maria Aparecida Silva', 'Rua das Flores, 123', 'Centro', '(11) 99999-1111', 1, 1, 2, 'NO'),
 ('José Carlos Souza', 'Av. Paulista, 1500', 'Bela Vista', '(11) 98888-2222', 1, 1, 1, 'YES'),
@@ -199,3 +200,4 @@ INSERT INTO donations (family_id, status, donation_month, delivery) VALUES
 (28,'OK','2026-06-01','2026-06-05'),
 (29,'OK','2026-06-01','2026-06-04'),
 (30,'PENDENT','2026-06-01',NULL);
+*/

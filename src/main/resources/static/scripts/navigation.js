@@ -1,113 +1,70 @@
-function currentMonth() {
+API_BASE = 'http://localhost:8080'
 
-    // This function returns the current month.
-    const today = new Date();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-    return `01/${month}/${year}`;
-}
+const currentMonth = () => `01/${String(new Date().getMonth() + 1).padStart(2, "0")}/${new Date().getFullYear()}`;
+const getActiveFamiliesByMonth = (month) => `${API_BASE}/get_all_families_active_by_month?month=${month}`;
 
 const appState = {
-    families: { data: null, isDirty: true },
-    children: { data: null, isDirty: true },
-    donationsByMonth: {}, 
-    cardsByMonth: {}      
+    cache: {},
+    invalidate: () => appState.cache = {}
 };
 
-const pages = {
-    donation: './templates/donation.html',
-    family: './templates/family.html',
-    child: './templates/child.html',
-    card: './templates/card.html'
+
+const routes = {
+    donation: {
+        template: './templates/donation.html',
+        endpoint: getActiveFamiliesByMonth,
+        render: (data) => {
+            typeof showFamilyStatus === 'function' && showFamilyStatus(data);
+            typeof updateCurrentDateLabel === 'function' && updateCurrentDateLabel();
+        }
+    },
+    card: {
+        template: './templates/card.html',
+        endpoint: getActiveFamiliesByMonth,
+        render: (data) => typeof generateCards === 'function' && generateCards(data)
+    },
+    family: {
+        template: './templates/family.html',
+        endpoint: () => `${API_BASE}/get_families`,
+        render: (data) => typeof showAllFamilies === 'function' && showAllFamilies(data)
+    },
+    child: {
+        template: './templates/child.html',
+        endpoint: () => `${API_BASE}/get_children_family`,
+        render: (data) => typeof showAllChildren === 'function' && showAllChildren(data)
+    }
 };
 
 async function navigateTo(pageKey, month = currentMonth()) {
+    const route = routes[pageKey];
     const viewport = document.getElementById('content-viewport');
-    
-    if (!pages[pageKey]) {
-        console.error(`Page "${pageKey}" is not mapped in pages.`);
-        return;
-    }
 
     try {
-        const response = await fetch(pages[pageKey]);
-        if (!response.ok) throw new Error(`Could not load page: ${pages[pageKey]}`);
-        
-        const htmlContent = await response.text();
-        viewport.innerHTML = htmlContent;
+        const url = route.endpoint(month);
 
-        switch (pageKey) {
-            case 'donation': {
-                if (!appState.donationsByMonth[month] || appState.donationsByMonth[month].isDirty) {
-                    const res = await fetch(`http://localhost:8080/get_all_families_active_by_month?month=${month}`);
-                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                    appState.donationsByMonth[month] = { data: await res.json(), isDirty: false };
-                }
-                
-                const donations = appState.donationsByMonth[month].data;
-                if (typeof showFamilyStatus === 'function') showFamilyStatus(donations);
-                if (typeof updateCurrentDateLabel === 'function') updateCurrentDateLabel();
-                break;
-            }
-
-            case 'family': {
-                if (appState.families.isDirty || !appState.families.data) {
-                    const res = await fetch('http://localhost:8080/get_families');
-                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                    appState.families.data = await res.json();
-                    appState.families.isDirty = false;
-                }
-
-                const families = appState.families.data;
-                if (typeof showAllFamilies === 'function') showAllFamilies(families);
-                break;
-            }
-
-            case 'child': {
-                if (appState.children.isDirty || !appState.children.data) {
-                    const res = await fetch('http://localhost:8080/get_children_family');
-                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                    appState.children.data = await res.json();
-                    appState.children.isDirty = false;
-                }
-
-                const children = appState.children.data;
-                if (typeof showAllChildren === 'function') showAllChildren(children);
-                break;
-            }
-
-            case 'card': {
-                if (!appState.cardsByMonth[month] || appState.cardsByMonth[month].isDirty) {
-                    const res = await fetch(`http://localhost:8080/get_all_families_active_by_month?month=${month}`);
-                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-                    appState.cardsByMonth[month] = { data: await res.json(), isDirty: false };
-                }
-
-                const cards = appState.cardsByMonth[month].data;
-                if (typeof generateCards === 'function') generateCards(cards);
-                break;
-            }
+        if (!appState.cache[url]) {
+            appState.cache[url] = fetch(url).then(r => r.ok ? r.json() : Promise.reject(`HTTP ${r.status}`));
         }
 
+        const [htmlResponse, data] = await Promise.all([
+            fetch(route.template).then(r => r.text()),
+            appState.cache[url]
+        ]);
+
+        viewport.innerHTML = htmlResponse;
+        route.render(data);
+
     } catch (error) {
-        console.error("Error during navigation:", error);
+        console.error("Error:", error);
         viewport.innerHTML = `
             <div class="container py-4">
                 <div class="alert alert-danger shadow-sm rounded-3" role="alert">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    An error occurred while loading content. Please check if the backend server is running.
+                     An error has occurred.
                 </div>
             </div>`;
     }
 }
 
-function onFamilyDataChanged() {
-    appState.families.isDirty = true;
-    appState.children.isDirty = true;
-    appState.cardsByMonth = {};
-    appState.donationsByMonth = {};
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    navigateTo('donation');
-});
+function onFamilyDataChanged() { appState.invalidate(); navigateTo('family'); }
+document.addEventListener('DOMContentLoaded', () => navigateTo('donation'));

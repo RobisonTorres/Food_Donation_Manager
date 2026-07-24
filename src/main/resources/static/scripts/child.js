@@ -1,52 +1,33 @@
-async function showAllChildren() {
-
-    // This function...
+async function showAllChildren(children) {
     const container = document.getElementById('showAllChildren');
     if (!container) return;
+    
     container.innerHTML = '';
 
-    try {
-        const response = await fetch('http://localhost:8080/get_children_family', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    const childrenCountElement = document.getElementById('active-children');
+    let activeChildrenTotal = 0;
+    let count = 1;
 
-        if (!response.ok) { throw new Error('Network response was not ok'); }
-
-        const families = await response.json();
-        const childrenCountElement = document.getElementById('active-children');
-        let activeChildrenTotal = 0;
-        let count = 1;
-
-        families.forEach(family => {
-            if (family.childList && family.childList.length > 0) {
-                family.childList.forEach(child => {
-                    container.appendChild(createChildRow(family, child, count));
-                    activeChildrenTotal++;
-                    count++;
-                });
-            }
-        });
-
-        if (childrenCountElement) {
-            childrenCountElement.innerHTML = activeChildrenTotal;
+    children.forEach(family => {
+        if (family.childList && family.childList.length > 0) {
+            family.childList.forEach(child => {
+                container.appendChild(createChildRow(family, child, count));
+                activeChildrenTotal++;
+                count++;
+            });
         }
+    });
 
-        if (activeChildrenTotal === 0) {
-            container.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4 fw-medium">No registered children found.</td></tr>';
-        }
+    if (childrenCountElement) {
+        childrenCountElement.innerHTML = activeChildrenTotal;
+    }
 
-    } catch (error) {
-        console.error(error);
-        container.innerHTML = '<tr><td colspan="5" class="text-center text-danger py-4 fw-medium">Error loading Children.</td></tr>';
+    if (activeChildrenTotal === 0) {
+        container.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4 fw-medium">No registered children found.</td></tr>';
     }
 }
 
 function createChildRow(family, child, count) {
-
-    // This function...
     const template = document.getElementById('family-child-row-template');
     const clone = template.content.cloneNode(true);
     let age = typeof calculateAge === 'function' ? calculateAge(child.birthDate) : 'N/A';
@@ -62,20 +43,16 @@ function createChildRow(family, child, count) {
 }
 
 function formatDate(dateString) {
-
-    // This function...
     if (!dateString) return '';
-    const birthDate = new Date(dateString)
+    const birthDate = new Date(dateString);
     birthDate.setDate(birthDate.getDate() + 1);
-    const day = String(birthDate.getDate()).padStart(2, "0")
+    const day = String(birthDate.getDate()).padStart(2, "0");
     const month = String(birthDate.getMonth() + 1).padStart(2, "0"); 
     const year = birthDate.getFullYear();
     return `${day}/${month}/${year}`;
 }
 
 function calculateAge(birthDateString) {
-
-    // This function...
     const today = new Date();
     const birthDate = new Date(birthDateString);
     let age = today.getFullYear() - birthDate.getFullYear();

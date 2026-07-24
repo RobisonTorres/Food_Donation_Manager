@@ -1,19 +1,15 @@
 function displayInfo() {
-
     const form = document.getElementById('showFamily');
     if (form) form.style.display = 'block';
 }
 
 function closeInfo(event) {
-    
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
-    form.style.display = 'none';
+    if (form) form.style.display = 'none';
 }
 
 function getCurrentDate() {
-
-    // This function returns the current date.
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
     const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -22,88 +18,59 @@ function getCurrentDate() {
 }
 
 function updateCurrentDateLabel() {
-
-    // This function populates the html element.
     const date = new Date();
     const today = date.getDate();
     const month = date.toLocaleDateString('pt-BR', { month: 'long' }).toLowerCase();
-    const year = date.getFullYear().toString().slice(-2)
+    const year = date.getFullYear().toString().slice(-2);
     document.getElementById('date').innerText = `${today} de ${month}/${year}`;
 }
 
-async function showFamilyStatus() {
+async function showFamilyStatus(donations) {
+    const tableBody = document.getElementById("familyTableNewBody");
+    const template = document.getElementById("familyRowTemplate");
 
-    // This function shows all active families and their donation status.
-    try {
-        const month = currentMonth();
+    tableBody.innerHTML = "";
+    let totalDelivered = 0;
 
-        const response = await fetch(
-            `http://localhost:8080/get_all_families_active_by_month?month=${month}`,
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }
-        );
+    donations.forEach((family, index) => {
+        const clone = template.content.cloneNode(true);
+        const id = family.familyId;
+        const status = family.status ?? "PENDENT";
 
-        const families = await response.json();
+        if (status === "OK") {
+            totalDelivered++;
+        }
 
-        const tableBody = document.getElementById("familyTableNewBody");
-        const template = document.getElementById("familyRowTemplate");
+        clone.querySelector(".family-number").textContent = index + 1;
+        clone.querySelector(".family-id").id = id;
+        clone.querySelector(".family-name").textContent = family.familyName;
+        clone.querySelector(".family-delivery").textContent = family.delivery ?? "N/A";
 
-        tableBody.innerHTML = "";
+        const select = clone.querySelector(".family-select");
+        select.id = `family-select-${id}`;
+        select.value = status;
 
-        let totalDelivered = 0;
+        applySelectStyle(select);
+        select.addEventListener("change", () => updateFamilyStatus(id));
 
-        families.forEach((family, index) => {
+        clone.querySelector(".family-info")
+            .addEventListener("click", () => showFamilyInfo(id));
 
-            const clone = template.content.cloneNode(true);
+        tableBody.appendChild(clone);
+    });
 
-            const id = family.familyId;
-            const status = family.status ?? "PENDENT";
-
-            if (status === "OK") {
-                totalDelivered++;
-            }
-
-            clone.querySelector(".family-number").textContent = index + 1;
-            clone.querySelector(".family-id").id = id;
-            clone.querySelector(".family-name").textContent = family.familyName;
-            clone.querySelector(".family-delivery").textContent = family.delivery ?? "N/A";
-
-            const select = clone.querySelector(".family-select");
-            select.id = `family-select-${id}`;
-            select.value = status;
-            select.addEventListener("change", () => updateFamilyStatus(id));
-
-            clone.querySelector(".family-info")
-                .addEventListener("click", () => showFamilyInfo(id));
-
-            tableBody.appendChild(clone);
-        });
-
-        document.getElementById("totalFamilies").textContent = families.length;
-        document.getElementById("totalDelivered").textContent = totalDelivered;
-        document.getElementById("totalPending").textContent = families.length - totalDelivered;
-
-    } catch (error) {
-        console.error("Error loading family status:", error);
-    }
+    document.getElementById("totalFamilies").textContent = donations.length;
+    document.getElementById("totalDelivered").textContent = totalDelivered;
+    document.getElementById("totalPending").textContent = donations.length - totalDelivered;
 }
 
 function updateFamilyStatus(familyId) {
-
-    // This function update the donation status.
     const date = getCurrentDate();
     const month = currentMonth();
-    const familyStatusSelect = document.getElementById(`family-select-${familyId}`);
-    const selectedStatus = familyStatusSelect.value;
-    let deliveryUpdate = null;
+    const select = document.getElementById(`family-select-${familyId}`);
+    const selectedStatus = select.value;
 
-    if (selectedStatus === "OK") {
-        deliveryUpdate = date;
-    }
+    let deliveryUpdate = selectedStatus === "OK" ? date : null;
 
     const familyDonationDto = {
         familyId: familyId,
@@ -111,21 +78,66 @@ function updateFamilyStatus(familyId) {
         delivery: deliveryUpdate
     };
 
-    fetch(
-        `http://localhost:8080/update_donation?month=${month}`,
-        {
-            method: "PUT",
-            headers: { "Content-Type": "application/json"},
-            body: JSON.stringify(familyDonationDto)
+    fetch(`${API_BASE}/update_donation?month=${month}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(familyDonationDto)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Error updating donation");
         }
-    )
-    .then(() => showFamilyStatus())
+
+        const url = `${API_BASE}/get_all_families_active_by_month?month=${month}`;
+        if (appState.cache[url]) {
+            appState.cache[url].then(data => {
+                const family = data.find(f => f.familyId === familyId);
+                if (family) {
+                    family.status = selectedStatus;
+                    family.delivery = deliveryUpdate;
+                }
+            });
+        }
+
+        updateDonationRow(familyId, selectedStatus, deliveryUpdate);
+    })
     .catch(error => console.error(error));
 }
 
-async function showFamilyInfo(familyId) {
+function applySelectStyle(selectElement) {
+    if (!selectElement) return;
 
-    // This function...
+    // Remove as classes de ambas as cores para evitar acúmulo
+    selectElement.classList.remove(
+        'bg-success-subtle', 'text-success', 'border-success-subtle',
+        'bg-danger-subtle', 'text-danger', 'border-danger-subtle'
+    );
+
+    // Aplica as exatamente mesmas classes de badge do Bootstrap
+    if (selectElement.value === "OK") {
+        selectElement.classList.add('bg-success-subtle', 'text-success', 'border-success-subtle');
+    } else {
+        selectElement.classList.add('bg-danger-subtle', 'text-danger', 'border-danger-subtle');
+    }
+}
+
+function updateDonationRow(id, status, delivery) {
+    const select = document.getElementById(`family-select-${id}`);
+    if (!select) return;
+
+    // 1. Atualiza a cor do select
+    applySelectStyle(select);
+
+    // 2. Atualiza a data de entrega na tabela
+    const row = select.closest("tr");
+    if (row) {
+        row.querySelector(".family-delivery").textContent = delivery ?? "N/A";
+    }
+}
+
+async function showFamilyInfo(familyId) {
     const resultContainer = document.getElementById('showFamily');
     resultContainer.innerHTML = '';
 
@@ -134,7 +146,7 @@ async function showFamilyInfo(familyId) {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/get_all_donation_by_family/${familyId}`,
+            `${API_BASE}/get_all_donation_by_family/${familyId}`,
             {
                 method: "GET",
                 headers: {
@@ -156,7 +168,7 @@ async function showFamilyInfo(familyId) {
         populateTable(clone, data.donationList);
 
         resultContainer.appendChild(clone);
-        displayInfo()
+        displayInfo();
         
     } catch (error) {
         console.error(error);
@@ -165,8 +177,6 @@ async function showFamilyInfo(familyId) {
 }
 
 function populateTable(clone, donationList) {
-
-    // This function...
     const table = clone.querySelector('#family-donation-show');
     if (!table) return;
 
@@ -177,7 +187,6 @@ function populateTable(clone, donationList) {
 
     let rows = '';
     donationList.slice(-6).forEach(donation => {
-
         const date = new Date(donation.month);
         const month = date.toLocaleDateString('pt-BR', { month: 'long', timeZone: 'UTC' }).toLowerCase();
         const deliveryDate = formatDeliveryDate(donation.delivery);
@@ -195,8 +204,6 @@ function populateTable(clone, donationList) {
 }
 
 function formatDeliveryDate(delivery) {
-
-    // This function...
     if (!delivery) return 'N/A';
 
     const deliveryDay = new Date(delivery);
@@ -208,21 +215,3 @@ function formatDeliveryDate(delivery) {
 
     return `${day}/${month}/${year}`;
 }
-
-button.addEventListener("click", () => {
-    menu.classList.toggle("show");
-});
-
-options.forEach(option => {
-    option.addEventListener("click", () => {
-
-        button.querySelector("span").textContent =
-            option.textContent;
-
-        dropdown.dataset.value = option.dataset.value;
-
-        menu.classList.remove("show");
-
-        updateFamilyStatus(id);
-    });
-});
