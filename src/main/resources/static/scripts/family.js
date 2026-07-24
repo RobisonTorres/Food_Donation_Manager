@@ -111,7 +111,7 @@ function addFamily(event) {
     const children = [];
     document.querySelectorAll('.child-item').forEach(child => {
         const name = child.querySelector('.child-name').value.trim();
-        const birthDate = child.querySelector('.child-birth').value;
+        const birthDate = formatDate(child.querySelector('.child-birth').value, true);
 
         if (name && birthDate) {
             children.push({ name, birthDate });
@@ -246,6 +246,28 @@ function deleteFamily(id) {
     .catch(error => console.error(error));
 }
 
+function formatDate(dateString, toDB = false) {
+    if (!dateString) return '';
+    
+    if (dateString.includes('/')) {
+        const [day, month, year] = dateString.split('/');
+        const formattedDay = day.padStart(2, "0");
+        const formattedMonth = month.padStart(2, "0");
+        return toDB ? `${year}-${formattedMonth}-${formattedDay}` : `${formattedDay}/${formattedMonth}/${year}`;
+    }
+
+    const cleanDate = dateString.split('T')[0];
+    const parts = cleanDate.split('-');
+    if (parts.length !== 3) return dateString;
+
+    const [year, month, day] = parts;
+    const formattedDay = day.padStart(2, "0");
+    const formattedMonth = month.padStart(2, "0");
+
+    return toDB ? `${year}-${formattedMonth}-${formattedDay}` : `${formattedDay}/${formattedMonth}/${year}`;
+}
+
+
 function addChild(item) {
     const container = document.getElementById(item);
     if (!container) return;
@@ -267,7 +289,7 @@ function addChild(item) {
             <input type="text" class="form-control ${nameClass}">
         </td>
         <td>
-            <input type="date" class="form-control ${birthClass}">
+            <input type="date" placeholder="dd/mm/aaaa" class="form-control ${birthClass}">
         </td>
         <td class="text-center">
             <button
@@ -302,7 +324,7 @@ async function updateChildren(id) {
                 <input type="text" class="form-control child-name-update" value="${child.name}">
             </td>
             <td>
-                <input type="date" class="form-control child-birth-update" value="${child.birthDate}">
+                <input type="date" class="form-control child-birth-update" value="${formatDate(child.birthDate)}">
             </td>
             <td class="text-center">
                 <button
@@ -325,7 +347,7 @@ function updateChildrenAll(event) {
     const childrenUpdate = [];
     document.querySelectorAll('.child-update-item').forEach(child => {
         const name = child.querySelector('.child-name-update').value.trim();
-        const birthDate = child.querySelector('.child-birth-update').value;
+        const birthDate = formatDate(child.querySelector('.child-birth-update').value, true);
 
         if (name && birthDate) {
             childrenUpdate.push({ name, birthDate });

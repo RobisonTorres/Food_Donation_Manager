@@ -42,16 +42,6 @@ function createChildRow(family, child, count) {
     return clone;
 }
 
-function formatDate(dateString) {
-    if (!dateString) return '';
-    const birthDate = new Date(dateString);
-    birthDate.setDate(birthDate.getDate() + 1);
-    const day = String(birthDate.getDate()).padStart(2, "0");
-    const month = String(birthDate.getMonth() + 1).padStart(2, "0"); 
-    const year = birthDate.getFullYear();
-    return `${day}/${month}/${year}`;
-}
-
 function calculateAge(birthDateString) {
     const today = new Date();
     const birthDate = new Date(birthDateString);

@@ -109,13 +109,11 @@ function updateFamilyStatus(familyId) {
 function applySelectStyle(selectElement) {
     if (!selectElement) return;
 
-    // Remove as classes de ambas as cores para evitar acúmulo
     selectElement.classList.remove(
         'bg-success-subtle', 'text-success', 'border-success-subtle',
         'bg-danger-subtle', 'text-danger', 'border-danger-subtle'
     );
 
-    // Aplica as exatamente mesmas classes de badge do Bootstrap
     if (selectElement.value === "OK") {
         selectElement.classList.add('bg-success-subtle', 'text-success', 'border-success-subtle');
     } else {
@@ -127,14 +125,26 @@ function updateDonationRow(id, status, delivery) {
     const select = document.getElementById(`family-select-${id}`);
     if (!select) return;
 
-    // 1. Atualiza a cor do select
+    let currentDelivered = Number(document.getElementById("totalDelivered").textContent);
+    let currentPending = Number(document.getElementById("totalPending").textContent);
+
     applySelectStyle(select);
 
-    // 2. Atualiza a data de entrega na tabela
     const row = select.closest("tr");
     if (row) {
         row.querySelector(".family-delivery").textContent = delivery ?? "N/A";
+        if (status === "OK") {
+            currentDelivered += 1;
+            currentPending -= 1;
+        } else {
+            currentDelivered -= 1;
+            currentPending += 1;
+        }
     }
+
+    document.getElementById("totalDelivered").textContent = currentDelivered;
+    document.getElementById("totalPending").textContent = currentPending;
+    
 }
 
 async function showFamilyInfo(familyId) {
