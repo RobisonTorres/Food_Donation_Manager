@@ -1,3 +1,6 @@
+/**
+* Renders a table row in the DOM for an active child eligible to receive a toy.
+*/
 async function showAllChildren(children) {
     const container = document.getElementById('showAllChildren');
     if (!container) return;
@@ -27,6 +30,9 @@ async function showAllChildren(children) {
     }
 }
 
+/**
+* Uses an HTML template to clone and populate a table row with child and family data.
+*/
 function createChildRow(family, child, count) {
     const template = document.getElementById('family-child-row-template');
     const clone = template.content.cloneNode(true);
@@ -42,6 +48,9 @@ function createChildRow(family, child, count) {
     return clone;
 }
 
+/**
+* Calculates a child's age in years from their birth date.
+*/
 function calculateAge(birthDateString) {
     const today = new Date();
     const birthDate = new Date(birthDateString);
@@ -52,6 +61,5 @@ function calculateAge(birthDateString) {
     if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
         age--;
     }
-
     return age;
 }

@@ -23,5 +23,4 @@ public class ServicesDonation {
     public Donation saveDonation(Donation donation) {
         return repositoryDonation.save(donation);
     }
-
 }

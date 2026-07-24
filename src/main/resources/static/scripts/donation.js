@@ -1,14 +1,27 @@
+/**
+ * Displays the information modal/popup for the selected family.
+ */
 function displayInfo() {
     const form = document.getElementById('showFamily');
     if (form) form.style.display = 'block';
 }
 
+/**
+ * Closes the information modal/popup and prevents default event actions.
+ * 
+ * @param {Event} [event] - The optional click or submit event.
+ */
 function closeInfo(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('showFamily');
     if (form) form.style.display = 'none';
 }
 
+/**
+ * Gets the current system date formatted as DD/MM/YYYY.
+ * 
+ * @returns {string} The formatted date string.
+ */
 function getCurrentDate() {
     const today = new Date();
     const day = String(today.getDate()).padStart(2, "0");
@@ -17,14 +30,23 @@ function getCurrentDate() {
     return `${day}/${month}/${year}`;
 }
 
+/**
+ * Formats and updates the current date label in the DOM (e.g., "24 of july/26").
+ */
 function updateCurrentDateLabel() {
     const date = new Date();
     const today = date.getDate();
     const month = date.toLocaleDateString('pt-BR', { month: 'long' }).toLowerCase();
     const year = date.getFullYear().toString().slice(-2);
-    document.getElementById('date').innerText = `${today} de ${month}/${year}`;
+    document.getElementById('date').innerText = `${today} of ${month}/${year}`;
 }
 
+/**
+ * Populates the table DOM with family donation statuses for the current month 
+ * and updates summary metrics.
+ * 
+ * @param {Array<Object>} donations - List of family donation status objects.
+ */
 async function showFamilyStatus(donations) {
     const tableBody = document.getElementById("familyTableNewBody");
     const template = document.getElementById("familyRowTemplate");
@@ -64,6 +86,12 @@ async function showFamilyStatus(donations) {
     document.getElementById("totalPending").textContent = donations.length - totalDelivered;
 }
 
+/**
+ * Sends an API request to update a family's donation status for the current month 
+ * and updates local cache and UI elements accordingly.
+ * 
+ * @param {number|string} familyId - The unique identifier of the family.
+ */
 function updateFamilyStatus(familyId) {
     const date = getCurrentDate();
     const month = currentMonth();
@@ -106,6 +134,12 @@ function updateFamilyStatus(familyId) {
     .catch(error => console.error(error));
 }
 
+/**
+ * Dynamically applies Bootstrap contextual color classes to the status select element 
+ * based on its current value.
+ * 
+ * @param {HTMLSelectElement} selectElement - The select DOM element to style.
+ */
 function applySelectStyle(selectElement) {
     if (!selectElement) return;
 
@@ -121,6 +155,13 @@ function applySelectStyle(selectElement) {
     }
 }
 
+/**
+ * Updates the donation row status and recalculates total delivered and pending counters in the DOM.
+ * 
+ * @param {number|string} id - The family ID corresponding to the row.
+ * @param {string} status - The updated status ("OK" or pending).
+ * @param {string} [delivery] - The updated delivery date text.
+ */
 function updateDonationRow(id, status, delivery) {
     const select = document.getElementById(`family-select-${id}`);
     if (!select) return;
@@ -144,9 +185,14 @@ function updateDonationRow(id, status, delivery) {
 
     document.getElementById("totalDelivered").textContent = currentDelivered;
     document.getElementById("totalPending").textContent = currentPending;
-    
 }
 
+/**
+ * Fetches detailed family information and donation history from the backend 
+ * and populates the modal dialog.
+ * 
+ * @param {number|string} familyId - The unique identifier of the family.
+ */
 async function showFamilyInfo(familyId) {
     const resultContainer = document.getElementById('showFamily');
     resultContainer.innerHTML = '';
@@ -186,6 +232,12 @@ async function showFamilyInfo(familyId) {
     }
 }
 
+/**
+ * Populates the family modal table with the last 6 donation records.
+ * 
+ * @param {DocumentFragment} clone - The template clone fragment containing the table.
+ * @param {Array<Object>} donationList - List of historical donation objects for the family.
+ */
 function populateTable(clone, donationList) {
     const table = clone.querySelector('#family-donation-show');
     if (!table) return;
@@ -213,6 +265,12 @@ function populateTable(clone, donationList) {
     table.innerHTML = rows;
 }
 
+/**
+ * Formats raw backend delivery date strings into DD/MM/YY format using UTC getters.
+ * 
+ * @param {string|Date} delivery - Raw delivery date string from backend.
+ * @returns {string} Formatted date string (DD/MM/YY) or 'N/A' if empty/invalid.
+ */
 function formatDeliveryDate(delivery) {
     if (!delivery) return 'N/A';
 

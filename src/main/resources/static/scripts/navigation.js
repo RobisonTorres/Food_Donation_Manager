@@ -1,14 +1,42 @@
-API_BASE = 'http://localhost:8080';
+/**
+ * Base URL endpoint for the backend REST API.
+ * @type {string}
+ */
+const API_BASE = 'http://localhost:8080';
 
+/**
+ * Returns the current month string formatted as "01/MM/YYYY".
+ * 
+ * @returns {string} Formatted month string.
+ */
 const currentMonth = () => `01/${String(new Date().getMonth() + 1).padStart(2, "0")}/${new Date().getFullYear()}`;
+
+/**
+ * Generates API endpoint URL for active families by specific month.
+ * 
+ * @param {string} month - Month formatted as 01/MM/YYYY.
+ * @returns {string} Endpoint URL.
+ */
 const getActiveFamiliesByMonth = (month) => `${API_BASE}/get_all_families_active_by_month?month=${month}`;
 
+/**
+ * Central application state store managing global routing and API cache.
+ * @type {Object}
+ */
 const appState = {
     cache: {},
     currentRoute: 'donation',
+    /**
+     * Clears all cached response promises from the local store.
+     */
     invalidate: () => appState.cache = {}
 };
 
+/**
+ * Configuration mapping for application single-page routes,
+ * templates, data endpoints, and component render callbacks.
+ * @type {Object<string, Object>}
+ */
 const routes = {
     donation: {
         template: './templates/donation.html',
@@ -35,6 +63,13 @@ const routes = {
     }
 };
 
+/**
+ * Handles client-side view navigation, asynchronous template fetching,
+ * data caching, and dynamic view rendering in the primary viewport.
+ * 
+ * @param {string} pageKey - Registered route key name.
+ * @param {string} [month=currentMonth()] - Selected target month for filtering.
+ */
 async function navigateTo(pageKey, month = currentMonth()) {
     const route = routes[pageKey];
     const viewport = document.getElementById('content-viewport');
@@ -67,6 +102,10 @@ async function navigateTo(pageKey, month = currentMonth()) {
     }
 }
 
+/**
+ * Triggers native browser print dialog, or issues a inter-process command code
+ * if running embedded inside a JavaFX WebView environment.
+ */
 function hideAndPrint() {
     const isJavaFX = navigator.userAgent.includes("JavaFX");
 
@@ -79,8 +118,11 @@ function hideAndPrint() {
     }
 }
 
+/**
+ * Parses initial URL search parameters and routes the view accordingly,
+ * configuring print mode and auto-close behaviors if invoked for printing.
+ */
 async function handleInitialRoute() {
-    
     const urlParams = new URLSearchParams(window.location.search);
     const routeParam = urlParams.get('route');
     const autoPrint = urlParams.get('autoPrint') === 'true';
@@ -104,6 +146,10 @@ async function handleInitialRoute() {
     }
 }
 
+/**
+ * Invalidate internal state cache and re-navigates to the family management view 
+ * following data modifications.
+ */
 function onFamilyDataChanged() { 
     appState.invalidate(); 
     navigateTo('family'); 

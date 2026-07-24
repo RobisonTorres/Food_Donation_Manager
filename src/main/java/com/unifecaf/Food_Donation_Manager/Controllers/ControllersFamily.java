@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -97,7 +96,6 @@ public class ControllersFamily {
         modelMapper.map(familyDto, family);
 
         servicesFamily.saveFamily(family);
-
         return ResponseEntity.ok().build();
     }
 
@@ -105,7 +103,6 @@ public class ControllersFamily {
     public ResponseEntity<Void> deleteFamily(@PathVariable Integer id) {
 
         servicesFamily.deleteFamilyById(id);
-
         return ResponseEntity.ok().build();
     }
 }

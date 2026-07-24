@@ -1,9 +1,21 @@
+/**
+ * Displays the modal form for creating a new family.
+ * Closes the update form prior to opening if active.
+ * 
+ * @param {Event} [event] - Optional trigger event.
+ */
 function displayForm(event) {
     closeFormUpdate(event);
     const form = document.getElementById('popForm');
     if (form) form.style.display = 'block';
 }
 
+/**
+ * Closes the family creation modal form, resets its scroll position,
+ * and clears dynamically appended children fields.
+ * 
+ * @param {Event} [event] - Optional trigger event to prevent default behavior.
+ */
 function closeForm(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('popForm');
@@ -15,12 +27,21 @@ function closeForm(event) {
     if (container) container.innerHTML = '';
 }
 
+/**
+ * Displays the modal form for editing family details.
+ * Closes the creation form prior to opening if active.
+ */
 function displayFormUpdate() {
     closeForm();
     const form = document.getElementById('popFormUpdate');
     if (form) form.style.display = 'block';
 }
 
+/**
+ * Closes the family update modal form and resets its scroll position.
+ * 
+ * @param {Event} [event] - Optional trigger event to prevent default behavior.
+ */
 function closeFormUpdate(event) {
     if (event) event.preventDefault();
     const form = document.getElementById('popFormUpdate');
@@ -30,6 +51,10 @@ function closeFormUpdate(event) {
     }
 }
 
+/**
+ * Displays the children update modal form for a specific family
+ * and initiates fetching their current registered children.
+ */
 async function displayFormUpdateChildren() {
     const form = document.getElementById('popFormUpdateChildren');
     const familyId = Number(document.getElementById('familyId').value);
@@ -37,6 +62,12 @@ async function displayFormUpdateChildren() {
     await updateChildren(familyId);
 }
 
+/**
+ * Closes the children update modal form, resets scroll position,
+ * and clears the child input list container.
+ * 
+ * @param {Event} [event] - Optional trigger event.
+ */
 function closeFormUpdateChild(event) {
     closeFormUpdate();
     const form = document.getElementById('popFormUpdateChildren');
@@ -48,6 +79,12 @@ function closeFormUpdateChild(event) {
     if (container) container.innerHTML = "";
 }
 
+/**
+ * Renders all family cards into the DOM sorted by active status and name,
+ * and updates overall, active, and inactive counter metrics.
+ * 
+ * @param {Array<Object>} data - List of family records retrieved from the backend.
+ */
 async function showAllFamilies(data) {
     const container = document.getElementById('showAllFamilies');
     const numberFamily = document.getElementById('totalFamilies');
@@ -75,11 +112,18 @@ async function showAllFamilies(data) {
     });
 
     if (numberActiveFamilies) numberActiveFamilies.innerHTML = count;
-    if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = data.length - count;
+    if (numberInactiveFamilies) numberInactiveFamilies.innerHTML = count ? data.length - count : 0;
 
     setupFamilySearch();
 }
 
+/**
+ * Creates and populates a family card DOM fragment using an HTML template.
+ * Sets up action buttons for edit and delete operations.
+ * 
+ * @param {Object} family - Family data object.
+ * @returns {DocumentFragment} Cloned HTML template populated with family details.
+ */
 function createFamilyCard(family) {
     const template = document.getElementById('family-card-template');
     const clone = template.content.cloneNode(true);
@@ -106,6 +150,12 @@ function createFamilyCard(family) {
     return clone;
 }
 
+/**
+ * Handles family creation form submission.
+ * Collects form inputs, builds the DTO, and dispatches a POST request to the API.
+ * 
+ * @param {Event} event - Submit event from form.
+ */
 function addFamily(event) {
     event.preventDefault();
     const children = [];
@@ -160,6 +210,11 @@ function addFamily(event) {
     });
 }
 
+/**
+ * Fetches family data by ID from backend and populates the update modal form inputs.
+ * 
+ * @param {number|string} id - The family ID to load.
+ */
 async function editFamilyLoad(id) {
     displayFormUpdate();
 
@@ -182,6 +237,12 @@ async function editFamilyLoad(id) {
         });
 }
 
+/**
+ * Handles family update form submission.
+ * Gathers updated values and issues a PUT request to update family record.
+ * 
+ * @param {Event} event - Submit event from form.
+ */
 function updateFamily(event) {
     event.preventDefault();
 
@@ -227,6 +288,11 @@ function updateFamily(event) {
     });
 }
 
+/**
+ * Prompts user confirmation and dispatches a DELETE request to remove a family by ID.
+ * 
+ * @param {number|string} id - The unique identifier of the family to delete.
+ */
 function deleteFamily(id) {
     if (!confirm("Are you sure you want to delete this family?")) {
         return;
@@ -246,6 +312,14 @@ function deleteFamily(id) {
     .catch(error => console.error(error));
 }
 
+/**
+ * Converts date strings between display format (DD/MM/YYYY) 
+ * and database format (YYYY-MM-DD) without timezone distortion.
+ * 
+ * @param {string} dateString - Raw date string to be formatted.
+ * @param {boolean} [toDB=false] - Converted to YYYY-MM-DD if true, DD/MM/YYYY if false.
+ * @returns {string} Formatted date string or empty string if invalid.
+ */
 function formatDate(dateString, toDB = false) {
     if (!dateString) return '';
     
@@ -267,7 +341,11 @@ function formatDate(dateString, toDB = false) {
     return toDB ? `${year}-${formattedMonth}-${formattedDay}` : `${formattedDay}/${formattedMonth}/${year}`;
 }
 
-
+/**
+ * Dynamically appends a new child input row into the specified container table.
+ * 
+ * @param {string} item - DOM container ID where the child row will be added.
+ */
 function addChild(item) {
     const container = document.getElementById(item);
     if (!container) return;
@@ -304,6 +382,11 @@ function addChild(item) {
     container.appendChild(row);
 }
 
+/**
+ * Fetches existing children for a given family and populates the child update form table.
+ * 
+ * @param {number|string} id - The family ID whose children are to be retrieved.
+ */
 async function updateChildren(id) {
     const container = document.getElementById("childrenContainerUpdate");
     container.innerHTML = "";
@@ -340,6 +423,11 @@ async function updateChildren(id) {
     });
 }
 
+/**
+ * Submits updated children list for a family via PUT request to backend API.
+ * 
+ * @param {Event} event - Submit event from form.
+ */
 function updateChildrenAll(event) {
     event.preventDefault();
     const id = document.getElementById("familyIdChildrenUpdate").value;
@@ -392,8 +480,11 @@ function updateChildrenAll(event) {
     });
 }
 
+/**
+ * Attaches real-time filter event listener to family search input field.
+ * Filters displayed family cards based on matched family names.
+ */
 function setupFamilySearch() {
- 
     const search = document.querySelector('#searchFamily');
     const allFamilies = document.querySelector('#showAllFamilies');
 

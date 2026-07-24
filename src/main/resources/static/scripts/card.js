@@ -1,4 +1,9 @@
+/**
+* Generates and renders label cards into the DOM.
+* Each card represents an active family eligible to receive a donation.
+*/
 async function generateCards(cards) {
+
     const container = document.getElementById('representatives');
     if (!container) return;
     

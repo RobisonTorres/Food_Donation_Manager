@@ -24,12 +24,10 @@ public class ServicesFamily {
     }
 
     public List<Family> getAllFamilies() {
-        // This function retrieves all families from the repository.
         return repositoryFamily.findAll();
     }
 
     public Family saveFamily(Family family) {
-        // This function saves a family to the repository.
         return repositoryFamily.save(family);
     }
 
@@ -37,6 +35,13 @@ public class ServicesFamily {
         return repositoryFamily.findAllFamiliesActiveByMonth(month);
     }
 
+    /**
+     * Retrieves full donation history and detail information for a specific family.
+     *
+     * @param familyId The unique identifier of the target family.
+     * @return A {@link FamilyDonationListDto} containing family details and donation history.
+     * @throws RuntimeException If no family is found with the provided ID.
+     */
     public FamilyDonationListDto getAllDonationsByFamily(Integer familyId) {
 
         Family family = repositoryFamily.findAllDonationsByFamily(familyId)
@@ -54,6 +59,11 @@ public class ServicesFamily {
         );
     }
 
+    /**
+     * Retrieves all active families along with their registered children and maps them to DTOs.
+     *
+     * @return A list of {@link FamilyChildDto} objects containing family and child details.
+     */
     public List<FamilyChildDto> getFamiliesWithChildren() {
 
         return repositoryFamily.findActiveFamiliesWithChildren()
