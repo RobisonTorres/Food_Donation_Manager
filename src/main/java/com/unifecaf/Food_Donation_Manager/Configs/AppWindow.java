@@ -2,7 +2,6 @@ package com.unifecaf.Food_Donation_Manager.Configs;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -21,12 +20,19 @@ public class AppWindow extends Application {
         WebView webView = new WebView();
 
         webView.getEngine().setOnAlert(event -> {
-            System.out.println("ALERT: " + event.getData());
+            String data = event.getData();
+
+            if (data != null && data.startsWith("COMMAND:OPEN_BROWSER:")) {
+                String targetUrl = data.replace("COMMAND:OPEN_BROWSER:", "");
+
+                getHostServices().showDocument(targetUrl);
+                return;
+            }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Food Donation Manager");
             alert.setHeaderText(null);
-            alert.setContentText(event.getData());
+            alert.setContentText(data);
             alert.show();
         });
 
@@ -37,24 +43,20 @@ public class AppWindow extends Application {
                     ButtonType.YES,
                     ButtonType.NO
             );
-
             confirm.setTitle("Confirmation");
             confirm.setHeaderText(null);
 
             Optional<ButtonType> result = confirm.showAndWait();
-
             return result.isPresent() && result.get() == ButtonType.YES;
         });
 
         webView.getEngine().setPromptHandler((PromptData prompt) -> {
             TextInputDialog dialog = new TextInputDialog(prompt.getDefaultValue());
-
             dialog.setTitle("Input");
             dialog.setHeaderText(null);
             dialog.setContentText(prompt.getMessage());
 
             Optional<String> result = dialog.showAndWait();
-
             return result.orElse(null);
         });
 
@@ -71,15 +73,6 @@ public class AppWindow extends Application {
         });
 
         stage.show();
-    }
-
-    public static void printWebView(WebView webView) {
-        PrinterJob job = PrinterJob.createPrinterJob();
-
-        if (job != null && job.showPrintDialog(webView.getScene().getWindow())) {
-            webView.getEngine().print(job);
-            job.endJob();
-        }
     }
 
     public static void main(String[] args) {

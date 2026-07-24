@@ -14,14 +14,14 @@ public class FoodDonationManagerApplication {
 		SpringApplication.run(FoodDonationManagerApplication.class, args);
 		AppWindow.main(args);
 	}
-	/*
+/*
 	@Bean
-	CommandLineRunner initialization () {
+	CommandLineRunner initialization() {
 		return args -> {
 
 			System.out.println("Fox Two!");
 			System.out.println("Access the app here: http://localhost:8080/index.html");
 		};
 	}
-	*/
+*/
 }

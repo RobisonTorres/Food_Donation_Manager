@@ -16,17 +16,17 @@
 }
 
 .btn-info-soft {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
     background: #e0edff;
     color: #2563eb;
     border: none;
     border-radius: 8px;
+    font-size: 0.82rem;
     font-weight: 600;
-    font-size: .82rem;
-    padding: .4rem .8rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .4rem;
-    transition: all .15s ease;
+    transition: all 0.15s ease;
 }
 
 .btn-info-soft:hover {
@@ -40,16 +40,16 @@
 }
 
 .label-card {
-    border: 2px solid #212529 !important;
-    border-radius: 0 !important;          
-    padding: 2.5rem 1.5rem;               
-    font-size: 1.75rem;                   
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     min-height: 140px;
-    margin: 0;                           
+    margin: 0;
+    padding: 2.5rem 1.5rem;
+    border: 2px solid #212529 !important;
+    border-radius: 0 !important;
+    font-size: 1.75rem;
 }
 
 .table {
@@ -60,24 +60,75 @@
 .table > thead.table-light {
     --bs-table-bg: #eef0f2;
     --bs-table-accent-bg: #eef0f2;
-    font-size: 1.0rem;
+    font-size: 1rem;
 }
 
 .table-hover > tbody > tr:hover > * {
     --bs-table-accent-bg: #e9ecef;
 }
 
+body.print-mode {
+    pointer-events: none !important;
+    user-select: none;
+}
+
+body.print-mode nav,
+body.print-mode header,
+body.print-mode .sidebar,
+body.print-mode .no-print,
+body.print-mode button:not(.btn-close) {
+    display: none !important;
+}
+
+body.print-mode #content-viewport {
+    pointer-events: auto;
+}
+
 @media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .no-print, 
     nav, 
-    .no-print {
+    header, 
+    footer {
         display: none !important;
     }
-    body, 
-    .container {
+
+    body {
         background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 12pt !important;
         margin: 0 !important;
         padding: 0 !important;
-        max-width: 100% !important;
+    }
+
+    .container {
         width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+
+    tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    th, 
+    td {
+        padding: 8px 12px !important;
+        font-size: 10pt !important;
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid #dee2e6 !important;
     }
 }

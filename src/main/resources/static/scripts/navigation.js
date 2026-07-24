@@ -1,13 +1,13 @@
-API_BASE = 'http://localhost:8080'
+API_BASE = 'http://localhost:8080';
 
 const currentMonth = () => `01/${String(new Date().getMonth() + 1).padStart(2, "0")}/${new Date().getFullYear()}`;
 const getActiveFamiliesByMonth = (month) => `${API_BASE}/get_all_families_active_by_month?month=${month}`;
 
 const appState = {
     cache: {},
+    currentRoute: 'donation',
     invalidate: () => appState.cache = {}
 };
-
 
 const routes = {
     donation: {
@@ -38,6 +38,7 @@ const routes = {
 async function navigateTo(pageKey, month = currentMonth()) {
     const route = routes[pageKey];
     const viewport = document.getElementById('content-viewport');
+    appState.currentRoute = pageKey;
 
     try {
         const url = route.endpoint(month);
@@ -67,8 +68,45 @@ async function navigateTo(pageKey, month = currentMonth()) {
 }
 
 function hideAndPrint() {
-    window.print();
+    const isJavaFX = navigator.userAgent.includes("JavaFX");
+
+    if (isJavaFX) {
+        const activeRoute = appState.currentRoute || 'donation';
+        const targetUrl = `${API_BASE}/?route=${activeRoute}&autoPrint=true`;
+        alert("COMMAND:OPEN_BROWSER:" + targetUrl);
+    } else {
+        window.print();
+    }
 }
 
-function onFamilyDataChanged() { appState.invalidate(); navigateTo('family'); }
-document.addEventListener('DOMContentLoaded', () => navigateTo('donation'));
+async function handleInitialRoute() {
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const routeParam = urlParams.get('route');
+    const autoPrint = urlParams.get('autoPrint') === 'true';
+
+    if (routeParam && routes[routeParam]) {
+        await navigateTo(routeParam);
+
+        if (autoPrint) {
+            document.body.classList.add('print-mode');
+
+            setTimeout(() => {
+                window.print();
+            }, 1000);
+
+            window.onafterprint = () => {
+                window.close();
+            };
+        }
+    } else {
+        navigateTo('donation');
+    }
+}
+
+function onFamilyDataChanged() { 
+    appState.invalidate(); 
+    navigateTo('family'); 
+}
+
+document.addEventListener('DOMContentLoaded', handleInitialRoute);
