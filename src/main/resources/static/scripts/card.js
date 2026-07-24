@@ -17,12 +17,3 @@ async function generateCards(cards) {
         `);
     });
 }
-
-function hideAndPrint() {
-    const panel = document.getElementById('printPanel');
-    panel.style.display = 'none';
-    window.print();
-    setTimeout(() => {
-        panel.style.display = '';
-    }, 500);
-}

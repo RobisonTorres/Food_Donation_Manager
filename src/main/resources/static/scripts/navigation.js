@@ -66,5 +66,9 @@ async function navigateTo(pageKey, month = currentMonth()) {
     }
 }
 
+function hideAndPrint() {
+    window.print();
+}
+
 function onFamilyDataChanged() { appState.invalidate(); navigateTo('family'); }
 document.addEventListener('DOMContentLoaded', () => navigateTo('donation'));
