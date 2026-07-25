@@ -75,6 +75,6 @@ public class Donation {
     }
 
     public enum DonationStatus {
-        OK, PENDENT
+        DELIVERED, PENDING
     }
 }

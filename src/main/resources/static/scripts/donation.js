@@ -57,9 +57,9 @@ async function showFamilyStatus(donations) {
     donations.forEach((family, index) => {
         const clone = template.content.cloneNode(true);
         const id = family.familyId;
-        const status = family.status ?? "PENDENT";
+        const status = family.status ?? "PENDING";
 
-        if (status === "OK") {
+        if (status === "DELIVERED") {
             totalDelivered++;
         }
 
@@ -98,7 +98,7 @@ function updateFamilyStatus(familyId) {
     const select = document.getElementById(`family-select-${familyId}`);
     const selectedStatus = select.value;
 
-    let deliveryUpdate = selectedStatus === "OK" ? date : null;
+    let deliveryUpdate = selectedStatus === "DELIVERED" ? date : null;
 
     const familyDonationDto = {
         familyId: familyId,
@@ -148,7 +148,7 @@ function applySelectStyle(selectElement) {
         'bg-danger-subtle', 'text-danger', 'border-danger-subtle'
     );
 
-    if (selectElement.value === "OK") {
+    if (selectElement.value === "DELIVERED") {
         selectElement.classList.add('bg-success-subtle', 'text-success', 'border-success-subtle');
     } else {
         selectElement.classList.add('bg-danger-subtle', 'text-danger', 'border-danger-subtle');
@@ -159,7 +159,7 @@ function applySelectStyle(selectElement) {
  * Updates the donation row status and recalculates total delivered and pending counters in the DOM.
  * 
  * @param {number|string} id - The family ID corresponding to the row.
- * @param {string} status - The updated status ("OK" or pending).
+ * @param {string} status - The updated status ("DELIVERED" or pending).
  * @param {string} [delivery] - The updated delivery date text.
  */
 function updateDonationRow(id, status, delivery) {
@@ -174,7 +174,7 @@ function updateDonationRow(id, status, delivery) {
     const row = select.closest("tr");
     if (row) {
         row.querySelector(".family-delivery").textContent = delivery ?? "N/A";
-        if (status === "OK") {
+        if (status === "DELIVERED") {
             currentDelivered += 1;
             currentPending -= 1;
         } else {
