@@ -1,4 +1,4 @@
-# 🍲 Food Donation Manager (Social ERP)
+# 🍲 Food Donation Manager
 
 **Food Donation Manager** is an application built to assist a local community organization in distributing food to families in need. The project was designed to transition manual paper-based tracking into a streamlined desktop application.
 
