@@ -75,7 +75,7 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the repository:**
    ```bash
-   git clone [...](https://github.com/your-username/food-donation-manager.git)
+   git clone https://github.com/RobisonTorres/Food_Donation_Manager.git
    cd food-donation-manager
    ```
 
@@ -90,7 +90,7 @@ Make sure you have the following installed on your machine:
    ```
 
 ### Downloading the application
-git clone [here](https://github.com/your-username/food-donation-manager.git)
+Download the app [here](https://drive.google.com/drive/folders/1RFeVev2t47Usq1Wg7k3GvW0EIqkkuLB5?usp=drive_link).
 
 ## License
 This project is licensed under the MIT License.   

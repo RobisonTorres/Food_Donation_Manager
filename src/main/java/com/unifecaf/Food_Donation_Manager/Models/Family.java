@@ -141,6 +141,6 @@ public class Family {
     }
 
     public enum FamilyStatus {
-        YES, NO
+        ACTIVE, INACTIVE
     }
 }

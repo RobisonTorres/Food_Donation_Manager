@@ -35,7 +35,7 @@ public interface RepositoryFamily extends JpaRepository<Family, Integer> {
         FROM Family f
         LEFT JOIN f.donationList d
             ON d.month = :month
-        WHERE f.status = com.unifecaf.Food_Donation_Manager.Models.Family.FamilyStatus.YES
+        WHERE f.status = com.unifecaf.Food_Donation_Manager.Models.Family.FamilyStatus.ACTIVE
         ORDER BY f.name
     """)
     List<FamilyDonationDto> findAllFamiliesActiveByMonth(@Param("month") LocalDate month);
@@ -63,7 +63,7 @@ public interface RepositoryFamily extends JpaRepository<Family, Integer> {
         SELECT DISTINCT f
         FROM Family f
         INNER JOIN FETCH f.childList c
-        WHERE f.status = com.unifecaf.Food_Donation_Manager.Models.Family.FamilyStatus.YES
+        WHERE f.status = com.unifecaf.Food_Donation_Manager.Models.Family.FamilyStatus.ACTIVE
         ORDER BY f.name
     """)
     List<Family> findActiveFamiliesWithChildren();

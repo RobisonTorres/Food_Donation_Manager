@@ -99,14 +99,14 @@ async function showAllFamilies(data) {
 
     data.sort((a, b) => {
         if (a.status !== b.status) {
-            return a.status === "YES" ? -1 : 1;
+            return a.status === "ACTIVE" ? -1 : 1;
         }
         return a.name.localeCompare(b.name);
     });
 
     data.forEach(family => {
         container.appendChild(createFamilyCard(family));
-        if (family.status === "YES") {
+        if (family.status === "ACTIVE") {
             count += 1;
         }
     });
@@ -137,9 +137,9 @@ function createFamilyCard(family) {
     clone.querySelector('.family-residents').textContent = family.residents;
 
     const statusEl = clone.querySelector('.family-status');
-    statusEl.textContent = family.status === "YES" ? "Active" : "Inactive";
-    statusEl.classList.add(family.status === "YES" ? "bg-success-subtle" : "bg-danger-subtle");
-    statusEl.classList.add(family.status === "YES" ? "text-success" : "text-danger");
+    statusEl.textContent = family.status === "ACTIVE" ? "Active" : "Inactive";
+    statusEl.classList.add(family.status === "ACTIVE" ? "bg-success-subtle" : "bg-danger-subtle");
+    statusEl.classList.add(family.status === "ACTIVE" ? "text-success" : "text-danger");
 
     const editBtn = clone.querySelector('.btn-edit');
     editBtn.addEventListener('click', () => editFamilyLoad(family.id));
